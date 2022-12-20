@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import styled from 'styled-components'
-import { posts } from '../../DUMMY_DATA'
 import { PostDetails } from './PostDetailsTypes'
 
 function MainPagePost(props: { post: PostDetails }) {

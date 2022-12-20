@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { posts } from '../../DUMMY_DATA'
 import { getFeaturedPosts } from '../../utils'
 import { PostDetails } from './PostDetailsTypes'
 import PostsGrid from './PostsGrid'
