@@ -5,16 +5,43 @@ export async function getAllPosts() {
 	return response.data
 }
 
-export async function getFeaturedPosts() {
+export async function getMostReadPosts() {
 	const posts = await getAllPosts()
 	const featuredArr = []
 
 	for (const key in posts) {
-		if (posts[key].isFeatured === true) {
-			featuredArr.push(posts[key])
+		featuredArr.push(posts[key])
+	}
+
+	//- sort by reads count and get 4 most read posts
+	const mostRead = featuredArr.sort((a, b) => b.reads - a.reads).slice(0, 4)
+
+	return mostRead
+}
+
+export async function getMostRecentPost() {
+	const posts = await getAllPosts()
+	const currentYear = new Date().getFullYear().toString()
+
+	const currentYearPosts = []
+
+	//- get current year's posts
+	for (const key in posts) {
+		if (posts[key].year === currentYear) {
+			currentYearPosts.push(posts[key])
 		}
 	}
-	return featuredArr
+
+	//- reduce that array to get the most recent post
+	const mostRecentPost = currentYearPosts.reduce((acc, current) => {
+		if (current.month < acc.month) {
+			return current
+		} else {
+			return acc
+		}
+	})
+
+	return mostRecentPost
 }
 
 export async function getPostBySlug(slug: string) {

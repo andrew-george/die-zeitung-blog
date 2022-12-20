@@ -4,6 +4,14 @@ import PostsGrid from '../../components/posts/PostsGrid'
 import { getAllPosts } from '../../utils'
 
 function AnnualFilter(props: { posts: PostDetails[]; year: string }) {
+	if (!props.posts) {
+		return (
+			<Wrapper>
+				<h1>Loading...</h1>
+			</Wrapper>
+		)
+	}
+
 	return (
 		<Wrapper>
 			<h1>All Posts of {props.year}</h1>

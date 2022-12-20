@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { PostDetails } from './PostDetailsTypes'
 
 function PostGridItem(props: { post: PostDetails }) {
-	const { id, title, intro, content, image, year, month, author, authorImage, isFeatured } =
-		props.post
+	const { id, title, intro, content, image, year, month, author, authorImage } = props.post
 
 	const formattedDate = new Date(+year, +month - 1).toLocaleDateString('en-US', {
 		month: 'long',
@@ -42,7 +41,7 @@ const Wrapper = styled.div`
 		padding: 1rem;
 		position: absolute;
 		transition: 0.2s ease all;
-		transform: translateY(-160px);
+		transform: translateY(-200px);
 
 		* {
 			text-shadow: 3px 3px 7px #000000;

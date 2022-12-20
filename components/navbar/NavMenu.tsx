@@ -24,6 +24,7 @@ function NavMenu() {
 
 	return (
 		<NavList>
+			<NavItem title='All Posts' path='/posts' />
 			<NavItem title='Explore' dropdown={years} />
 		</NavList>
 	)

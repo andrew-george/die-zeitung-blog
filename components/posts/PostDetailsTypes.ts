@@ -9,6 +9,5 @@ export interface PostDetails {
 	month: string
 	author: string
 	authorImage: string
-	isFeatured: boolean
 	reads: number
 }

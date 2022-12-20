@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { GoChevronDown } from 'react-icons/go'
 import styled from 'styled-components'
 
-function NavItem(props: { title: string; dropdown?: string[] }) {
+function NavItem(props: { title: string; dropdown?: string[]; path?: string }) {
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(true)
 
 	function submenuHandler() {
@@ -12,10 +12,22 @@ function NavItem(props: { title: string; dropdown?: string[] }) {
 
 	return (
 		<Wrapper>
-			<li className='main-list-item' onClick={submenuHandler}>
-				{props.title}
-				{props.dropdown && <GoChevronDown />}
-			</li>
+			{props.path && (
+				<Link href={props.path}>
+					<li className='main-list-item' onClick={submenuHandler}>
+						{props.title}
+						{props.dropdown && <GoChevronDown />}
+					</li>
+				</Link>
+			)}
+
+			{!props.path && (
+				<li className='main-list-item' onClick={submenuHandler}>
+					{props.title}
+					{props.dropdown && <GoChevronDown />}
+				</li>
+			)}
+
 			{props.dropdown && (
 				<ul className={`${isMenuCollapsed ? 'collapsed dropdown' : 'dropdown'}`}>
 					{props.dropdown?.map((dropdownItem, index) => {

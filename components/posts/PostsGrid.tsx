@@ -24,6 +24,7 @@ const GridWrapper = styled.div`
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+	margin-bottom: 3rem;
 `
 
 export default PostsGrid

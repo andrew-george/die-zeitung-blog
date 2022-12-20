@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getFeaturedPosts } from '../../utils'
+import { getMostReadPosts } from '../../utils'
 import { PostDetails } from './PostDetailsTypes'
 import PostsGrid from './PostsGrid'
 
@@ -9,7 +9,7 @@ function FeaturedPosts() {
 
 	useEffect(() => {
 		async function getPosts() {
-			const featuredArr = await getFeaturedPosts()
+			const featuredArr = await getMostReadPosts()
 			setFeaturedPosts(featuredArr)
 		}
 		getPosts()
@@ -17,7 +17,7 @@ function FeaturedPosts() {
 
 	return (
 		<Wrapper>
-			<h2>Featured Posts</h2>
+			<h2>Most Read</h2>
 			<PostsGrid posts={featuredPosts} />
 		</Wrapper>
 	)
