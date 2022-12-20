@@ -5,10 +5,10 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import styled from 'styled-components'
 
 function Button(props: {
-	children: React.ReactNode
+	children?: React.ReactNode
 	style: 'fill' | 'none'
-	status: string
-	error: boolean
+	status?: string
+	error?: boolean
 	onClick?: () => void
 }) {
 	//- conditional style returns
