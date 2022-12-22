@@ -8,21 +8,24 @@ function Button(props: {
 	children?: React.ReactNode
 	style: 'fill' | 'none'
 	status?: string
-	error?: boolean
+	error?: any
 	theme: string
+	type: 'button' | 'submit'
+	disabled: any
 	onClick?: () => void
 }) {
 	//- conditional style returns
 	if (props.error) {
 		return (
-			<ErrorButton>
-				<BiErrorCircle /> <span>Invalid Email</span>
+			<ErrorButton type={props.type} disabled={props.disabled}>
+				<BiErrorCircle />
+				<span>Subscribe</span>
 			</ErrorButton>
 		)
 	}
 	if (props.status === 'success') {
 		return (
-			<SuccessButton>
+			<SuccessButton type={props.type}>
 				<AiFillCheckCircle /> <span>Subscribed</span>
 			</SuccessButton>
 		)
@@ -30,7 +33,7 @@ function Button(props: {
 
 	if (props.status === 'loading') {
 		return (
-			<LoadingButton>
+			<LoadingButton type={props.type}>
 				<ClipLoader size={10} />
 				<span>Loading</span>
 			</LoadingButton>
@@ -38,17 +41,33 @@ function Button(props: {
 	}
 
 	if (props.style === 'none' && props.theme === 'dark') {
-		return <DarkPlainButton onClick={props.onClick}>{props.children}</DarkPlainButton>
+		return (
+			<DarkPlainButton type={props.type} onClick={props.onClick}>
+				{props.children}
+			</DarkPlainButton>
+		)
 	}
 	if (props.style === 'none' && props.theme === 'light') {
-		return <PlainButton onClick={props.onClick}>{props.children}</PlainButton>
+		return (
+			<PlainButton type={props.type} onClick={props.onClick}>
+				{props.children}
+			</PlainButton>
+		)
 	}
 
 	if (props.style === 'fill' && props.theme === 'dark') {
-		return <DarkFillButton onClick={props.onClick}>{props.children}</DarkFillButton>
+		return (
+			<DarkFillButton type={props.type} onClick={props.onClick}>
+				{props.children}
+			</DarkFillButton>
+		)
 	}
 	if (props.style === 'fill' && props.theme === 'light') {
-		return <LightFillButton onClick={props.onClick}>{props.children}</LightFillButton>
+		return (
+			<LightFillButton type={props.type} onClick={props.onClick}>
+				{props.children}
+			</LightFillButton>
+		)
 	}
 }
 
@@ -81,7 +100,7 @@ const DarkFillButton = styled(PlainButton)`
 `
 
 const ErrorButton = styled(PlainButton)`
-	background-color: #ff5454;
+	background-color: #d34d4d;
 `
 const LoadingButton = styled(PlainButton)`
 	background-color: #f4efbd;

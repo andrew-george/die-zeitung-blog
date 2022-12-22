@@ -63,3 +63,13 @@ img {
 	color: #000;
 	background-color: #fff;
 }
+
+/* - BROWSER SCROLLBAR - */
+::-webkit-scrollbar {
+	background-color: rgb(63, 63, 63);
+	width: 7px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: rgb(19, 19, 19);
+	border-radius: 50px;
+}

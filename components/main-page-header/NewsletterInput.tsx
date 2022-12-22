@@ -1,61 +1,68 @@
+import { useFormik } from 'formik'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import * as yup from 'yup'
 import { subscribeToNewsletter } from '../../utils'
 import Button from '../ui/Button'
 
 import type { RootState } from '../../redux/store'
 
 function Newsletter() {
-	const [enteredEmail, setEnteredEmail] = useState('')
-	const [error, setError] = useState(false)
 	const [status, setStatus] = useState('')
-
 	const theme = useSelector((store: RootState) => store.theme)
 
-	async function subscriptionHandler() {
-		if (!enteredEmail || !enteredEmail.includes('@')) {
-			setError(true)
-			return
-		} else {
+	const formik = useFormik({
+		//- INITIAL VALUES
+		initialValues: {
+			email: '',
+		},
+		//- VALIDATION
+		validationSchema: yup.object({
+			email: yup.string().email('Invalid Email!').required('Please enter your email!'),
+		}),
+		//- SUBMISSION
+		async onSubmit(values) {
 			setStatus('loading')
-			const response = await subscribeToNewsletter(enteredEmail)
+			const response = await subscribeToNewsletter(values.email)
 
 			if (response.status === 200) {
 				setStatus('success')
-				setEnteredEmail('')
-
+				values.email = ''
 				setTimeout(() => {
 					setStatus('')
 				}, 3000)
 			}
-		}
-	}
+		},
+	})
 
 	return (
 		<Wrapper>
 			<h4>Subscribe to Newsletter!</h4>
-			<div className='form-control'>
-				<input
-					type='email'
-					name='newsletter'
-					placeholder='Enter your email...'
-					value={enteredEmail}
-					onChange={e => {
-						setError(false)
-						setEnteredEmail(e.target.value)
-					}}
-				/>
+			<form className='form-control'>
+				<div className='input'>
+					<input
+						type='email'
+						name='email'
+						id='email'
+						placeholder='Enter your email...'
+						value={formik.values.email}
+						onChange={formik.handleChange}
+					/>
+					{formik.errors.email && <p className='error-msg'>{formik.errors.email}</p>}
+				</div>
 				<Button
+					type='submit'
 					theme={theme}
 					style='fill'
-					error={error}
+					error={formik.errors.email}
 					status={status}
-					onClick={subscriptionHandler}
+					disabled={formik.errors}
+					onClick={formik.handleSubmit}
 				>
 					Subscribe
 				</Button>
-			</div>
+			</form>
 		</Wrapper>
 	)
 }
@@ -79,11 +86,20 @@ const Wrapper = styled.div`
 		justify-content: center;
 		align-items: center;
 
-		input {
-			border: none;
-			padding: 0.6rem;
-			font-family: inherit;
-			border-radius: 5px;
+		.input {
+			position: relative;
+			.error-msg {
+				position: absolute;
+				top: 40px;
+				color: #bc3333;
+				font-size: 0.8rem;
+			}
+			input {
+				border: none;
+				padding: 0.6rem;
+				font-family: inherit;
+				border-radius: 5px;
+			}
 		}
 	}
 `

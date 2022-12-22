@@ -14,7 +14,6 @@ function AuthButtons() {
 	const dispatch = useDispatch()
 
 	const { user, error, isLoading } = useUser()
-	console.log(user)
 
 	useEffect(() => {
 		dispatch(setUser(user))
