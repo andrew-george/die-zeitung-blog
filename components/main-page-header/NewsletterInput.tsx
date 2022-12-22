@@ -1,12 +1,17 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { subscribeToNewsletter } from '../../utils'
 import Button from '../ui/Button'
+
+import type { RootState } from '../../redux/store'
 
 function Newsletter() {
 	const [enteredEmail, setEnteredEmail] = useState('')
 	const [error, setError] = useState(false)
 	const [status, setStatus] = useState('')
+
+	const theme = useSelector((store: RootState) => store.theme)
 
 	async function subscriptionHandler() {
 		if (!enteredEmail || !enteredEmail.includes('@')) {
@@ -41,7 +46,13 @@ function Newsletter() {
 						setEnteredEmail(e.target.value)
 					}}
 				/>
-				<Button style='fill' error={error} status={status} onClick={subscriptionHandler}>
+				<Button
+					theme={theme}
+					style='fill'
+					error={error}
+					status={status}
+					onClick={subscriptionHandler}
+				>
 					Subscribe
 				</Button>
 			</div>

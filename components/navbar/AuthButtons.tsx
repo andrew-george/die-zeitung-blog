@@ -1,23 +1,40 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Button from '../ui/Button'
 
+import type { RootState } from '../../redux/store'
+
 function AuthButtons() {
-	const [isLoggedIn, setIsLoggedIn] = useState(false)
+	const theme = useSelector((store: RootState) => store.theme)
+	const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0()
 
 	return (
 		<AuthButtonsWrapper>
-			{!isLoggedIn && (
-				<>
-					<Button style='none'>Login</Button>
-					<Button style='fill'>Sign Up</Button>
-				</>
+			{!isAuthenticated && (
+				<Button
+					style='fill'
+					theme={theme}
+					onClick={() => {
+						loginWithRedirect()
+					}}
+				>
+					Login / Sign Up
+				</Button>
 			)}
-			{isLoggedIn && (
+			{isAuthenticated && user && (
 				<>
-					<Button style='none'>Logout</Button>
-					<Image src='/images/Original.jpg' alt='profile' width={200} height={200} />
+					<Button
+						theme={theme}
+						style='none'
+						onClick={() => logout({ returnTo: window.location.origin })}
+					>
+						Logout
+					</Button>
+					<Image src={user.picture} alt='profile picture' width={200} height={200} />
 				</>
 			)}
 		</AuthButtonsWrapper>

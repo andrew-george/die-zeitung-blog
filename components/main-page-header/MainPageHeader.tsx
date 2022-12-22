@@ -20,7 +20,8 @@ function MainPageHeader() {
 }
 
 const Wrapper = styled.header`
-	background-color: #e1eee8;
+	background-color: #98aba3;
+	color: black;
 
 	.container {
 		max-width: 400px;

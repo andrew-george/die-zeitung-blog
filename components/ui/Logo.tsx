@@ -2,11 +2,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-function Logo() {
+function Logo(props: { theme: string }) {
+	let logoSrc: string
+
+	if (props.theme === 'dark') {
+		logoSrc = '/images/logo-light.png'
+	} else {
+		logoSrc = '/images/logo-dark.png'
+	}
+
 	return (
 		<Wrapper>
 			<Link href='/'>
-				<Image src='/images/logo.png' alt='logo' width={1060} height={330} />
+				<Image src={logoSrc} alt='logo' width={1060} height={330} />
 			</Link>
 		</Wrapper>
 	)

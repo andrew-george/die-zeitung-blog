@@ -9,6 +9,7 @@ function Button(props: {
 	style: 'fill' | 'none'
 	status?: string
 	error?: boolean
+	theme: string
 	onClick?: () => void
 }) {
 	//- conditional style returns
@@ -40,8 +41,11 @@ function Button(props: {
 		return <PlainButton onClick={props.onClick}>{props.children}</PlainButton>
 	}
 
-	if (props.style === 'fill') {
-		return <FillButton onClick={props.onClick}>{props.children}</FillButton>
+	if (props.style === 'fill' && props.theme === 'dark') {
+		return <DarkFillButton onClick={props.onClick}>{props.children}</DarkFillButton>
+	}
+	if (props.style === 'fill' && props.theme === 'light') {
+		return <LightFillButton onClick={props.onClick}>{props.children}</LightFillButton>
 	}
 }
 
@@ -59,10 +63,15 @@ const PlainButton = styled.button`
 	}
 `
 
-const FillButton = styled(PlainButton)`
+const LightFillButton = styled(PlainButton)`
 	border: 1.6px solid #000;
 	background-color: #000;
 	color: #fff;
+`
+const DarkFillButton = styled(PlainButton)`
+	border: 1.6px solid #fff;
+	background-color: #fff;
+	color: #000;
 `
 
 const ErrorButton = styled(PlainButton)`
