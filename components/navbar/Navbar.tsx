@@ -54,7 +54,7 @@ const NavWrapper = styled.nav`
 		svg {
 			font-size: 1.3rem;
 			cursor: pointer;
-			margin: 0 1rem;
+			/* margin: 0 1rem; */
 			transition: 0.1s ease all;
 			&:hover {
 				transform: scale(1.1);

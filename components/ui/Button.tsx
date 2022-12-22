@@ -37,7 +37,10 @@ function Button(props: {
 		)
 	}
 
-	if (props.style === 'none') {
+	if (props.style === 'none' && props.theme === 'dark') {
+		return <DarkPlainButton onClick={props.onClick}>{props.children}</DarkPlainButton>
+	}
+	if (props.style === 'none' && props.theme === 'light') {
 		return <PlainButton onClick={props.onClick}>{props.children}</PlainButton>
 	}
 
@@ -61,6 +64,9 @@ const PlainButton = styled.button`
 	span {
 		margin-left: 5px;
 	}
+`
+const DarkPlainButton = styled(PlainButton)`
+	color: white;
 `
 
 const LightFillButton = styled(PlainButton)`
