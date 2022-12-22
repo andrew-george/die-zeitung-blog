@@ -1,7 +1,7 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { useUser } from '@auth0/nextjs-auth0/client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from 'react-spinners/ClipLoader'
 import styled from 'styled-components'
@@ -11,14 +11,10 @@ import { RootState, setUser } from '../../redux/store'
 
 function AuthButtons() {
 	const theme = useSelector((store: RootState) => store.theme)
-	const [redirectUri, setRedirectUri] = useState<any>()
 	const dispatch = useDispatch()
 
-	const { loginWithRedirect, logout, isAuthenticated, user, isLoading } = useAuth0()
-
-	useEffect(() => {
-		setRedirectUri(window.location.origin)
-	}, [])
+	const { user, error, isLoading } = useUser()
+	console.log(user)
 
 	useEffect(() => {
 		dispatch(setUser(user))
@@ -43,21 +39,15 @@ function AuthButtons() {
 
 	return (
 		<AuthButtonsWrapper>
-			{!isAuthenticated && !isLoading && (
-				<Button
-					style='fill'
-					theme={theme}
-					onClick={() => {
-						loginWithRedirect()
-					}}
-				>
-					Login / Sign Up
+			{!isLoading && !user && (
+				<Button style='fill' theme={theme}>
+					<a href='/api/auth/login'>Login / Sign Up</a>
 				</Button>
 			)}
-			{isAuthenticated && !isLoading && user && (
+			{!isLoading && user && (
 				<>
-					<Button theme={theme} style='none' onClick={() => logout({ returnTo: redirectUri })}>
-						Logout
+					<Button theme={theme} style='none'>
+						<a href='/api/auth/logout'>Logout</a>
 					</Button>
 					<Link href='/profile'>
 						<Image src={user.picture} alt='profile picture' width={200} height={200} />
