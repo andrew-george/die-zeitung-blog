@@ -10,7 +10,7 @@ const clientId = 'R8j96dbVaFUL8E3pdqZxshpdcO3CkXTQ'
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<Auth0Provider domain={domain} clientId={clientId} redirectUri='http://localhost:3000'>
+		<Auth0Provider domain={domain} clientId={clientId} redirectUri={window.location.origin}>
 			<Provider store={store}>
 				<Layout>
 					<Component {...pageProps} />
