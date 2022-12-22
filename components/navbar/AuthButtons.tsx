@@ -11,10 +11,14 @@ import { RootState, setUser } from '../../redux/store'
 
 function AuthButtons() {
 	const theme = useSelector((store: RootState) => store.theme)
-	// const userState = useSelector((store: RootState) => store.user)
+	const [redirectUri, setRedirectUri] = useState<any>()
 	const dispatch = useDispatch()
 
 	const { loginWithRedirect, logout, isAuthenticated, user, isLoading } = useAuth0()
+
+	useEffect(() => {
+		setRedirectUri(window.location.origin)
+	}, [])
 
 	useEffect(() => {
 		dispatch(setUser(user))
@@ -52,11 +56,7 @@ function AuthButtons() {
 			)}
 			{isAuthenticated && !isLoading && user && (
 				<>
-					<Button
-						theme={theme}
-						style='none'
-						onClick={() => logout({ returnTo: window.location.origin })}
-					>
+					<Button theme={theme} style='none' onClick={() => logout({ returnTo: redirectUri })}>
 						Logout
 					</Button>
 					<Link href='/profile'>
