@@ -11,7 +11,7 @@ function Button(props: {
 	error?: any
 	theme: string
 	type: 'button' | 'submit'
-	disabled: any
+	disabled?: any
 	onClick?: () => void
 }) {
 	//- conditional style returns

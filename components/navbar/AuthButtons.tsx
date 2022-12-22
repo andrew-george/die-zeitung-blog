@@ -39,13 +39,13 @@ function AuthButtons() {
 	return (
 		<AuthButtonsWrapper>
 			{!isLoading && !user && (
-				<Button style='fill' theme={theme}>
+				<Button type='button' style='fill' theme={theme}>
 					<a href='/api/auth/login'>Login / Sign Up</a>
 				</Button>
 			)}
 			{!isLoading && user && (
 				<>
-					<Button theme={theme} style='none'>
+					<Button type='button' theme={theme} style='none'>
 						<a href='/api/auth/logout'>Logout</a>
 					</Button>
 					<Link href='/profile'>
