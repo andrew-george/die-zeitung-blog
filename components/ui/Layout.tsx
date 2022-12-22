@@ -1,4 +1,4 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { useUser } from '@auth0/nextjs-auth0/client'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -9,7 +9,7 @@ import Footer from './Footer'
 function Layout(props: { children: React.ReactNode }) {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
-	const { user, isAuthenticated, isLoading } = useAuth0()
+	const { user, isLoading, error } = useUser()
 
 	useEffect(() => {
 		const themeFromLS = JSON.parse(localStorage.getItem('theme'))
