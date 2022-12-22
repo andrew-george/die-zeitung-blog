@@ -6,7 +6,7 @@ function Footer() {
 	return (
 		<FooterWrapper>
 			<div className='footer-container'>
-				<Image src='/images/logo-white.png' alt='logo' width={1060} height={330} />
+				<Image src='/images/logo-light.png' alt='logo' width={1060} height={330} />
 				<p className='copyrights'>
 					&copy; Designed & Developed by<span>Andrew Berty</span>
 				</p>
