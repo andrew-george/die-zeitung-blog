@@ -40,6 +40,11 @@ const Wrapper = styled.div`
 		font-family: var(--font-dm-serif);
 		font-size: 2.4rem;
 		margin-bottom: 2rem;
+
+		@media (max-width: 768px) {
+			font-size: 1.5rem;
+			text-align: center;
+		}
 	}
 
 	.details {
@@ -53,8 +58,8 @@ const Wrapper = styled.div`
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 50px;
 			margin-bottom: 0.8rem;
+			height: 70px;
 		}
 
 		p {
@@ -62,16 +67,16 @@ const Wrapper = styled.div`
 		}
 
 		img {
-			width: 50px;
-			height: 50px;
+			width: 70px;
+			height: 70px;
 			border-radius: 50%;
 			object-fit: cover;
 		}
 	}
 
 	.date {
-		font-weight: 700;
-		margin-top: 2rem;
+		font-size: 0.7rem;
+		margin-top: 0.5rem;
 	}
 
 	.author {
@@ -82,11 +87,21 @@ const Wrapper = styled.div`
 	}
 
 	.text {
-		width: 60vw;
+		width: 40vw;
 		font-weight: 500;
+
+		@media (max-width: 768px) {
+			width: 80vw;
+		}
 	}
+
 	img {
 		margin: 3rem 0;
+
+		@media (max-width: 768px) {
+			width: 100%;
+			height: fit-content;
+		}
 	}
 `
 

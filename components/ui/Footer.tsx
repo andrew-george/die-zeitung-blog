@@ -6,7 +6,7 @@ function Footer() {
 	return (
 		<FooterWrapper>
 			<div className='footer-container'>
-				<Image src='/images/logo-light.png' alt='logo' width={1060} height={330} />
+				<Image src='/images/logo-light.png' alt='logo' width={135} height={40} />
 				<p className='copyrights'>
 					&copy; Designed & Developed by<span>Andrew Berty</span>
 				</p>
@@ -28,7 +28,7 @@ function Footer() {
 
 const FooterWrapper = styled.footer`
 	background-color: #000;
-	height: 100px;
+	min-height: 100px;
 	display: flex;
 	align-items: center;
 
@@ -39,26 +39,34 @@ const FooterWrapper = styled.footer`
 		align-items: center;
 		justify-content: space-between;
 		display: flex;
-	}
 
-	img {
-		max-height: 40px;
-		max-width: 135px;
-	}
+		@media (max-width: 768px) {
+			flex-direction: column;
+			padding: 0.5rem 0;
 
-	.copyrights {
-		font-size: 0.6rem;
-
-		span {
-			margin-left: 4px;
-			font-size: 0.7rem;
-			font-weight: 700;
+			* {
+				margin: 0.5rem 0;
+			}
 		}
-	}
 
-	svg {
-		margin-left: 1rem;
-		font-size: 1.4rem;
+		.copyrights {
+			font-size: 0.6rem;
+
+			span {
+				margin-left: 4px;
+				font-size: 0.7rem;
+				font-weight: 700;
+			}
+		}
+		.social-icons {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			svg {
+				margin: 0 1rem;
+				font-size: 1.4rem;
+			}
+		}
 	}
 `
 

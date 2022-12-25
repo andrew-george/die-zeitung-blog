@@ -1,9 +1,14 @@
 import Link from 'next/link'
 import { useState } from 'react'
-import { GoChevronDown } from 'react-icons/go'
+import { GoChevronDown, GoChevronRight } from 'react-icons/go'
 import styled from 'styled-components'
 
-function NavItem(props: { title: string; dropdown?: string[]; path?: string }) {
+function NavItem(props: {
+	title: string
+	dropdown?: string[]
+	path?: string
+	chevronDirection?: string
+}) {
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(true)
 
 	function submenuHandler() {
@@ -11,7 +16,7 @@ function NavItem(props: { title: string; dropdown?: string[]; path?: string }) {
 	}
 
 	return (
-		<Wrapper>
+		<Wrapper className='nav-item'>
 			{props.path && (
 				<Link href={props.path}>
 					<li className='main-list-item' onClick={submenuHandler}>
@@ -24,7 +29,8 @@ function NavItem(props: { title: string; dropdown?: string[]; path?: string }) {
 			{!props.path && (
 				<li className='main-list-item' onClick={submenuHandler}>
 					{props.title}
-					{props.dropdown && <GoChevronDown />}
+					{props.dropdown && props.chevronDirection === 'right' && <GoChevronRight />}
+					{props.dropdown && props.chevronDirection !== 'right' && <GoChevronDown />}
 				</li>
 			)}
 

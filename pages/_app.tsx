@@ -1,6 +1,5 @@
 import { UserProvider } from '@auth0/nextjs-auth0/client'
 import type { AppProps } from 'next/app'
-import { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import Layout from '../components/ui/Layout'
 import { store } from '../redux/store'

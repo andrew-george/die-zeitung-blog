@@ -1,14 +1,14 @@
+import { FaBars } from 'react-icons/fa'
 import { TbBulb, TbBulbOff } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { toggleTheme } from '../../redux/store'
 import Logo from '../ui/Logo'
-import AuthButtons from './AuthButtons'
-import NavMenu from './NavMenu'
 
 import type { RootState } from '../../redux/store'
+import AuthButtons from './AuthButtons'
 
-function Navbar() {
+function MobileNavbar(props: { menuToggleHandler: () => void }) {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
 
@@ -19,15 +19,15 @@ function Navbar() {
 	return (
 		<NavWrapper>
 			<div className='nav-left'>
-				<Logo theme={theme} />
-				<NavMenu />
-			</div>
-			<div className='nav-right'>
+				<FaBars className='hamburger-toggler' onClick={props.menuToggleHandler} />
 				{theme === 'dark' ? (
-					<TbBulb onClick={themeToggleHandler} />
+					<TbBulb className='theme-toggler' onClick={themeToggleHandler} />
 				) : (
-					<TbBulbOff onClick={themeToggleHandler} />
+					<TbBulbOff className='theme-toggler' onClick={themeToggleHandler} />
 				)}
+			</div>
+			<Logo theme={theme} />
+			<div className='nav-right'>
 				<AuthButtons />
 			</div>
 		</NavWrapper>
@@ -38,17 +38,36 @@ const NavWrapper = styled.nav`
 	font-weight: 500;
 	max-width: 90%;
 	margin: 0 auto;
-	display: flex;
 	height: 100px;
+	display: none;
 	justify-content: space-between;
 	align-items: center;
 
 	@media (max-width: 768px) {
-		display: none;
-	}
-
-	.nav-left {
 		display: flex;
+
+		.logout-btn {
+			display: none;
+		}
+
+		.nav-left {
+			width: 50px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.theme-toggler {
+				font-size: 1.3rem;
+			}
+
+			.hamburger-toggler {
+				font-size: 1.1rem;
+			}
+		}
+
+		img {
+			margin: 0;
+		}
 	}
 
 	.nav-right {
@@ -57,14 +76,8 @@ const NavWrapper = styled.nav`
 
 		svg {
 			font-size: 1.3rem;
-			cursor: pointer;
-			/* margin: 0 1rem; */
-			transition: 0.1s ease all;
-			&:hover {
-				transform: scale(1.1);
-			}
 		}
 	}
 `
 
-export default Navbar
+export default MobileNavbar

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { getAllPosts } from '../../utils'
 import NavItem from './NavItem'
 
-function NavMenu() {
+function NavMenu(props: { chevronDirection?: string }) {
 	const [years, setYears] = useState([''])
 
 	useEffect(() => {
@@ -23,9 +23,9 @@ function NavMenu() {
 	}, [])
 
 	return (
-		<NavList>
+		<NavList className='nav-menu'>
 			<NavItem title='All Posts' path='/posts' />
-			<NavItem title='Explore' dropdown={years} />
+			<NavItem chevronDirection={props.chevronDirection} title='Explore' dropdown={years} />
 		</NavList>
 	)
 }

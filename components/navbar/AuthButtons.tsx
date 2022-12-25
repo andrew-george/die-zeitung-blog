@@ -1,11 +1,10 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from 'react-spinners/ClipLoader'
 import styled from 'styled-components'
 import Button from '../ui/Button'
+import NavProfile from './NavProfile'
 
 import { RootState, setUser } from '../../redux/store'
 
@@ -13,7 +12,7 @@ function AuthButtons() {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
 
-	const { user, error, isLoading } = useUser()
+	const { user, isLoading } = useUser()
 
 	useEffect(() => {
 		dispatch(setUser(user))
@@ -21,37 +20,30 @@ function AuthButtons() {
 	}, [user])
 
 	if (isLoading) {
-		if (theme === 'dark') {
-			return (
-				<AuthButtonsWrapper>
-					<ClipLoader className='clip-loader' size={25} color='#fff' />
-				</AuthButtonsWrapper>
-			)
-		} else {
-			return (
-				<AuthButtonsWrapper>
-					<ClipLoader className='clip-loader' size={25} />
-				</AuthButtonsWrapper>
-			)
-		}
+		return (
+			<AuthButtonsWrapper>
+				<ClipLoader
+					className='clip-loader'
+					size={25}
+					color={`${theme === 'dark' ? '#fff' : '#000'}`}
+				/>
+			</AuthButtonsWrapper>
+		)
 	}
 
 	return (
 		<AuthButtonsWrapper>
-			{!isLoading && !user && (
-				<Button type='button' style='fill' theme={theme}>
-					<a href='/api/auth/login'>Login / Sign Up</a>
-				</Button>
-			)}
-			{!isLoading && user && (
-				<>
-					<Button type='button' theme={theme} style='none'>
+			{user ? (
+				<div className='auth'>
+					<Button className='logout-btn' type='button' theme={theme} style='none'>
 						<a href='/api/auth/logout'>Logout</a>
 					</Button>
-					<Link href='/profile'>
-						<Image src={user.picture} alt='profile picture' width={200} height={200} />
-					</Link>
-				</>
+					<NavProfile />
+				</div>
+			) : (
+				<Button type='button' style='fill' theme={theme}>
+					<a href='/api/auth/login'>Login</a>
+				</Button>
 			)}
 		</AuthButtonsWrapper>
 	)
@@ -62,8 +54,16 @@ const AuthButtonsWrapper = styled.div`
 	justify-content: space-between;
 	align-items: center;
 
+	.auth {
+		display: flex;
+	}
+
 	.clip-loader {
 		margin: 0 1rem;
+	}
+
+	.logout-btn {
+		margin-right: 1rem;
 	}
 
 	img {
@@ -71,7 +71,6 @@ const AuthButtonsWrapper = styled.div`
 		height: 50px;
 		border-radius: 50%;
 		object-fit: cover;
-		margin-left: 1rem;
 	}
 `
 

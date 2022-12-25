@@ -31,7 +31,6 @@ function PostGridItem(props: { post: PostDetails }) {
 
 const Wrapper = styled.div`
 	position: relative;
-
 	&:hover .content {
 		opacity: 1;
 	}
@@ -41,7 +40,11 @@ const Wrapper = styled.div`
 		padding: 1rem;
 		position: absolute;
 		transition: 0.2s ease all;
-		transform: translateY(-200px);
+		transform: translateY(-180px);
+
+		@media (max-width: 768px) {
+			opacity: 1;
+		}
 
 		* {
 			text-shadow: 3px 3px 7px #000000;

@@ -24,14 +24,17 @@ const Wrapper = styled.header`
 	color: black;
 
 	.container {
-		max-width: 400px;
-		height: 80%;
-		height: 20rem;
+		width: 40%;
+		padding: 2rem;
 		margin: 0 auto 3rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+
+		@media (max-width: 768px) {
+			width: 90%;
+		}
 	}
 
 	.description {
@@ -47,6 +50,10 @@ const Wrapper = styled.header`
 			font-family: var(--font-dm-serif);
 			font-size: 2rem;
 			padding: 1rem;
+
+			@media (max-width: 768px) {
+				font-size: 1.3rem;
+			}
 		}
 	}
 `

@@ -12,12 +12,13 @@ function Button(props: {
 	theme: string
 	type: 'button' | 'submit'
 	disabled?: any
+	className?: string
 	onClick?: () => void
 }) {
 	//- conditional style returns
 	if (props.error) {
 		return (
-			<ErrorButton type={props.type} disabled={props.disabled}>
+			<ErrorButton className={props?.className} type={props.type} disabled={props.disabled}>
 				<BiErrorCircle />
 				<span>Subscribe</span>
 			</ErrorButton>
@@ -25,7 +26,7 @@ function Button(props: {
 	}
 	if (props.status === 'success') {
 		return (
-			<SuccessButton type={props.type}>
+			<SuccessButton className={props?.className} type={props.type}>
 				<AiFillCheckCircle /> <span>Subscribed</span>
 			</SuccessButton>
 		)
@@ -33,7 +34,7 @@ function Button(props: {
 
 	if (props.status === 'loading') {
 		return (
-			<LoadingButton type={props.type}>
+			<LoadingButton className={props?.className} type={props.type}>
 				<ClipLoader size={10} />
 				<span>Loading</span>
 			</LoadingButton>
@@ -42,14 +43,14 @@ function Button(props: {
 
 	if (props.style === 'none' && props.theme === 'dark') {
 		return (
-			<DarkPlainButton type={props.type} onClick={props.onClick}>
+			<DarkPlainButton className={props?.className} type={props.type} onClick={props.onClick}>
 				{props.children}
 			</DarkPlainButton>
 		)
 	}
 	if (props.style === 'none' && props.theme === 'light') {
 		return (
-			<PlainButton type={props.type} onClick={props.onClick}>
+			<PlainButton className={props?.className} type={props.type} onClick={props.onClick}>
 				{props.children}
 			</PlainButton>
 		)
@@ -57,14 +58,14 @@ function Button(props: {
 
 	if (props.style === 'fill' && props.theme === 'dark') {
 		return (
-			<DarkFillButton type={props.type} onClick={props.onClick}>
+			<DarkFillButton className={props?.className} type={props.type} onClick={props.onClick}>
 				{props.children}
 			</DarkFillButton>
 		)
 	}
 	if (props.style === 'fill' && props.theme === 'light') {
 		return (
-			<LightFillButton type={props.type} onClick={props.onClick}>
+			<LightFillButton className={props?.className} type={props.type} onClick={props.onClick}>
 				{props.children}
 			</LightFillButton>
 		)

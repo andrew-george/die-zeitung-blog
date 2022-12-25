@@ -1,15 +1,22 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { RootState, setTheme, setUser } from '../../redux/store'
+import MobileNavbar from '../navbar/MobileNavbar'
+import MobileNavMenu from '../navbar/MobileNavMenu'
 import Navbar from '../navbar/Navbar'
 import Footer from './Footer'
 
 function Layout(props: { children: React.ReactNode }) {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
-	const { user, isLoading, error } = useUser()
+	const { user } = useUser()
+	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false)
+
+	function menuToggleHandler() {
+		setIsHamburgerMenuOpen(prevState => !prevState)
+	}
 
 	useEffect(() => {
 		const themeFromLS = JSON.parse(localStorage.getItem('theme'))
@@ -29,7 +36,12 @@ function Layout(props: { children: React.ReactNode }) {
 
 	return (
 		<Wrapper className={`${theme}-theme`}>
+			<MobileNavMenu
+				menuToggleHandler={menuToggleHandler}
+				className={isHamburgerMenuOpen ? 'menu-reveal' : ''}
+			/>
 			<Navbar />
+			<MobileNavbar menuToggleHandler={menuToggleHandler} />
 			<ChildrenWrapper>{props.children}</ChildrenWrapper>
 			<Footer />
 		</Wrapper>
