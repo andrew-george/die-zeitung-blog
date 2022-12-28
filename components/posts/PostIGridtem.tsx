@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { PostDetails } from './PostDetailsTypes'
 
 function PostGridItem(props: { post: PostDetails }) {
-	const { id, title, intro, content, image, year, month, author, authorImage } = props.post
+	const { id, title, intro, content, image, year, month, author, authorImage, reads } = props.post
 
-	const formattedDate = new Date(+year, +month - 1).toLocaleDateString('en-US', {
+	const formattedDate = new Date(+year, +month).toLocaleDateString('en-US', {
 		month: 'long',
 		year: 'numeric',
 	})
@@ -20,6 +20,7 @@ function PostGridItem(props: { post: PostDetails }) {
 					<span>...Read more</span>
 				</p>
 				<p className='date'>Posted on {formattedDate}</p>
+				<p className='reads'>{reads} reads</p>
 				<div className='author'>
 					<Image src={authorImage} alt={author} width={200} height={200} />
 					<p>{author}</p>
@@ -40,7 +41,7 @@ const Wrapper = styled.div`
 		padding: 1rem;
 		position: absolute;
 		transition: 0.2s ease all;
-		transform: translateY(-180px);
+		transform: translateY(-200px);
 
 		@media (max-width: 768px) {
 			opacity: 1;
@@ -77,6 +78,11 @@ const Wrapper = styled.div`
 				object-fit: cover;
 				margin-right: 10px;
 			}
+		}
+
+		.reads {
+			font-size: 0.8rem;
+			font-weight: 700;
 		}
 	}
 

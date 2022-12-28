@@ -1,5 +1,5 @@
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import * as yup from 'yup'
@@ -9,8 +9,8 @@ import Button from '../ui/Button'
 import type { RootState } from '../../redux/store'
 
 function Newsletter() {
-	const [status, setStatus] = useState('')
 	const theme = useSelector((store: RootState) => store.theme)
+	const { status, mutate, reset } = useMutation((email: string) => subscribeToNewsletter(email))
 
 	const formik = useFormik({
 		//- INITIAL VALUES
@@ -23,16 +23,11 @@ function Newsletter() {
 		}),
 		//- SUBMISSION
 		async onSubmit(values) {
-			setStatus('loading')
-			const response = await subscribeToNewsletter(values.email)
-
-			if (response.status === 200) {
-				setStatus('success')
-				values.email = ''
-				setTimeout(() => {
-					setStatus('')
-				}, 3000)
-			}
+			mutate(values.email)
+			formik.resetForm()
+			setTimeout(() => {
+				reset()
+			}, 3000)
 		},
 	})
 
@@ -59,6 +54,7 @@ function Newsletter() {
 					status={status}
 					disabled={formik.errors}
 					onClick={formik.handleSubmit}
+					successText='Subscribed'
 				>
 					Subscribe
 				</Button>
@@ -91,7 +87,7 @@ const Wrapper = styled.div`
 			.error-msg {
 				position: absolute;
 				top: 40px;
-				color: #bc3333;
+				color: #f86363;
 				font-size: 0.8rem;
 			}
 			input {

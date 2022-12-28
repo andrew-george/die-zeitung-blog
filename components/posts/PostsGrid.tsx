@@ -5,6 +5,13 @@ import { PostDetails } from './PostDetailsTypes'
 import PostGridItem from './PostIGridtem'
 
 function PostsGrid(props: { posts: PostDetails[] }) {
+	if (props.posts.length === 0) {
+		return (
+			<GridWrapper>
+				<h3>No Posts To View!</h3>
+			</GridWrapper>
+		)
+	}
 	return (
 		<GridWrapper>
 			{props.posts.map((post, index) => (

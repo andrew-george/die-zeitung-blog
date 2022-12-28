@@ -1,24 +1,12 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getMostReadPosts } from '../../utils'
 import { PostDetails } from './PostDetailsTypes'
 import PostsGrid from './PostsGrid'
 
-function FeaturedPosts() {
-	const [featuredPosts, setFeaturedPosts] = useState<PostDetails[]>([])
-
-	useEffect(() => {
-		async function getPosts() {
-			const featuredArr = await getMostReadPosts()
-			setFeaturedPosts(featuredArr)
-		}
-		getPosts()
-	}, [])
-
+function FeaturedPosts(props: { featuredPosts: PostDetails[] }) {
 	return (
 		<Wrapper>
 			<h2>Most Read</h2>
-			<PostsGrid posts={featuredPosts} />
+			<PostsGrid posts={props.featuredPosts} />
 		</Wrapper>
 	)
 }

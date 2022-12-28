@@ -1,21 +1,20 @@
+import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
-import { PostDetails } from '../../components/posts/PostDetailsTypes'
 import PostsGrid from '../../components/posts/PostsGrid'
 import { getAllPosts } from '../../utils'
 
-function AllPostsPage(props: { posts: PostDetails[] }) {
-	if (!props.posts) {
-		return (
-			<Wrapper>
-				<h1>Loading...</h1>
-			</Wrapper>
-		)
-	}
+function AllPostsPage() {
+	const { data: posts, isLoading } = useQuery('get-posts', getAllPosts)
+
+	if (isLoading)
+		<Wrapper>
+			<h1>Loading...</h1>
+		</Wrapper>
 
 	return (
 		<Wrapper>
 			<h1>All Posts</h1>
-			<PostsGrid posts={props.posts} />
+			<PostsGrid posts={posts} />
 		</Wrapper>
 	)
 }
@@ -33,16 +32,11 @@ const Wrapper = styled.div`
 `
 
 export async function getStaticProps() {
-	const allPosts = await getAllPosts()
-
-	const posts = []
-
-	for (const key in allPosts) {
-		posts.push(allPosts[key])
-	}
+	const queryClient = new QueryClient()
+	await queryClient.prefetchQuery('get-posts', getAllPosts)
 
 	return {
-		props: { posts },
+		props: { dehydratedState: dehydrate(queryClient) },
 	}
 }
 

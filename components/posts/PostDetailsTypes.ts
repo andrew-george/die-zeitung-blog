@@ -1,13 +1,14 @@
 export interface PostDetails {
-	id: number
+	id: string
 	slug: string
 	title: string
 	intro: string
 	content: string
 	image: string
-	year: string
-	month: string
+	year: number
+	month: number
 	author: string
+	userSub: string
 	authorImage: string
 	reads: number
 }

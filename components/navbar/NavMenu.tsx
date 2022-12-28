@@ -1,26 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 import styled from 'styled-components'
-import { getAllPosts } from '../../utils'
+import { getNavMenuYears } from '../../utils'
 import NavItem from './NavItem'
 
 function NavMenu(props: { chevronDirection?: string }) {
-	const [years, setYears] = useState([''])
+	const { data: years, isLoading } = useQuery('navMenu', getNavMenuYears)
 
-	useEffect(() => {
-		async function getPosts() {
-			const posts = await getAllPosts()
-
-			let yearsArr = []
-
-			for (const key in posts) {
-				yearsArr.push(posts[key].year)
-			}
-			const yearsSet = Array.from(new Set(yearsArr))
-			setYears(yearsSet)
-		}
-
-		getPosts()
-	}, [])
+	if (isLoading) {
+		return (
+			<NavList className='nav-menu'>
+				<NavItem title='All Posts' path='/posts' />
+				<NavItem chevronDirection={props.chevronDirection} title='Explore' dropdown={[]} />
+			</NavList>
+		)
+	}
 
 	return (
 		<NavList className='nav-menu'>

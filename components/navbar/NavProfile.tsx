@@ -6,7 +6,7 @@ function NavProfile() {
 	const { user } = useUser()
 
 	return (
-		<Link href='/profile'>
+		<Link href='/dashboard'>
 			<Image src={user.picture} alt='profile picture' width={200} height={200} />
 		</Link>
 	)

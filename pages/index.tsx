@@ -1,16 +1,42 @@
+import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
 import MainPageHeader from '../components/main-page-header/MainPageHeader'
 import FeaturedPosts from '../components/posts/FeaturedPosts'
 import FullPost from '../components/posts/FullPost'
-import { PostDetails } from '../components/posts/PostDetailsTypes'
-import { getMostRecentPost } from '../utils'
+import { getMostReadPosts, getMostRecentPost } from '../utils'
 
-function HomePage(props: { mostRecentPost: PostDetails }) {
-	if (!props.mostRecentPost) {
+function HomePage() {
+	const { data: featuredPosts, isLoading: isFeaturedPostsLoading } = useQuery(
+		'featured-posts',
+		getMostReadPosts
+	)
+	const { data: mostRecentPost, isLoading: isMostRecentPostsLoading } = useQuery(
+		'most-recent-post',
+		getMostRecentPost
+	)
+
+	if (isMostRecentPostsLoading) {
 		return (
-			<>
-				<h1>Loading...</h1>
-			</>
+			<Wrapper>
+				<MainPageHeader />
+				<div className='section-title'>
+					<h1>Most Recent</h1>
+				</div>
+				<h2>Loading...</h2>
+				<FeaturedPosts featuredPosts={featuredPosts} />
+			</Wrapper>
+		)
+	}
+	if (isFeaturedPostsLoading) {
+		return (
+			<Wrapper>
+				<MainPageHeader />
+				<div className='section-title'>
+					<h1>Most Recent</h1>
+				</div>
+				<FullPost post={mostRecentPost} />
+				<h2>Loading...</h2>
+			</Wrapper>
 		)
 	}
 
@@ -20,8 +46,8 @@ function HomePage(props: { mostRecentPost: PostDetails }) {
 			<div className='section-title'>
 				<h1>Most Recent</h1>
 			</div>
-			<FullPost post={props.mostRecentPost} />
-			<FeaturedPosts />
+			<FullPost post={mostRecentPost} />
+			<FeaturedPosts featuredPosts={featuredPosts} />
 		</Wrapper>
 	)
 }
@@ -38,15 +64,13 @@ const Wrapper = styled.div`
 		}
 	}
 `
-
 export async function getStaticProps() {
-	const mostRecentPost = await getMostRecentPost()
+	const queryClient = new QueryClient()
+	await queryClient.prefetchQuery('featured-posts', getMostReadPosts)
+	await queryClient.prefetchQuery('most-recent-post', getMostRecentPost)
 
 	return {
-		props: {
-			mostRecentPost,
-		},
+		props: { dehydratedState: dehydrate(queryClient) },
 	}
 }
-
 export default HomePage

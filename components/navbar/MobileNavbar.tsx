@@ -8,7 +8,7 @@ import Logo from '../ui/Logo'
 import type { RootState } from '../../redux/store'
 import AuthButtons from './AuthButtons'
 
-function MobileNavbar(props: { menuToggleHandler: () => void }) {
+function MobileNavbar() {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
 
@@ -19,7 +19,7 @@ function MobileNavbar(props: { menuToggleHandler: () => void }) {
 	return (
 		<NavWrapper>
 			<div className='nav-left'>
-				<FaBars className='hamburger-toggler' onClick={props.menuToggleHandler} />
+				<FaBars className='hamburger-toggler' />
 				{theme === 'dark' ? (
 					<TbBulb className='theme-toggler' onClick={themeToggleHandler} />
 				) : (

@@ -1,14 +1,39 @@
+import { useUser } from '@auth0/nextjs-auth0/client'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { FaEdit, FaTrash } from 'react-icons/fa'
+import { useMutation } from 'react-query'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { PostDetails } from './PostDetailsTypes'
+import { RootState } from '../../redux/store'
+import { deletePost } from '../../utils'
+import Button from '../ui/Button'
 
-function FullPost(props: { post: PostDetails }) {
-	const { year, month, title, author, authorImage, intro, image, content } = props.post
+function FullPost(props: { post }) {
+	const { year, month, title, author, authorImage, intro, image, content, id, userSub, reads } =
+		props.post
 
-	const formattedDate = new Date(+year, +month - 1).toLocaleDateString('en-US', {
+	const { user, isLoading } = useUser()
+
+	const router = useRouter()
+
+	const { mutate } = useMutation('delete-post', deletePost, {
+		onSuccess: () => {
+			router.replace('/dashboard')
+		},
+	})
+
+	const theme = useSelector((store: RootState) => store.theme)
+
+	const formattedDate = new Date(year, month - 1).toLocaleDateString('en-US', {
 		month: 'long',
 		year: 'numeric',
 	})
+
+	if (isLoading) {
+		return <h1>Loading</h1>
+	}
 
 	return (
 		<Wrapper>
@@ -19,7 +44,28 @@ function FullPost(props: { post: PostDetails }) {
 				</div>
 				<p>{author}</p>
 				<p className='date'>Posted on {formattedDate}</p>
+				<p className='reads'>{reads} reads</p>
 			</div>
+			{userSub === user?.sub && (
+				<div className='btn-container'>
+					<Link href={`/edit-post/${props.post.id}`}>
+						<Button className='action-btn edit-btn' style='fill' theme={theme} type='button'>
+							<FaEdit />
+							Edit
+						</Button>
+					</Link>
+					<Button
+						className='action-btn delete-btn'
+						style='fill'
+						theme={theme}
+						type='button'
+						onClick={() => mutate(id)}
+					>
+						<FaTrash />
+						Delete
+					</Button>
+				</div>
+			)}
 			<p className='text'>{intro}</p>
 			<Image src={image} alt='logo' width={700} height={500} />
 			<p className='text'>{content}</p>
@@ -73,9 +119,26 @@ const Wrapper = styled.div`
 			object-fit: cover;
 		}
 	}
+	.btn-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.action-btn {
+			margin-bottom: 3rem;
+			svg {
+				margin-right: 5px;
+			}
+		}
+	}
 
 	.date {
-		font-size: 0.7rem;
+		font-size: 0.8rem;
+		margin-top: 0.5rem;
+	}
+
+	.reads {
+		font-size: 0.8rem;
 		margin-top: 0.5rem;
 	}
 

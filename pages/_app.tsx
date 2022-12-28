@@ -1,18 +1,28 @@
 import { UserProvider } from '@auth0/nextjs-auth0/client'
 import type { AppProps } from 'next/app'
+import { useState } from 'react'
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { Provider } from 'react-redux'
 import Layout from '../components/ui/Layout'
 import { store } from '../redux/store'
 import '../styles/globals.css'
 
 export default function App({ Component, pageProps }: AppProps) {
+	const [queryClient] = useState(() => new QueryClient())
+
 	return (
-		<UserProvider>
-			<Provider store={store}>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
-			</Provider>
-		</UserProvider>
+		<QueryClientProvider client={queryClient}>
+			<UserProvider>
+				<Provider store={store}>
+					<Layout>
+						<Hydrate state={pageProps.dehydratedState}>
+							<Component {...pageProps} />
+						</Hydrate>
+					</Layout>
+				</Provider>
+			</UserProvider>
+			<ReactQueryDevtools />
+		</QueryClientProvider>
 	)
 }

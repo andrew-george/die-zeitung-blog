@@ -8,6 +8,7 @@ function Button(props: {
 	children?: React.ReactNode
 	style: 'fill' | 'none'
 	status?: string
+	successText?: string
 	error?: any
 	theme: string
 	type: 'button' | 'submit'
@@ -27,7 +28,7 @@ function Button(props: {
 	if (props.status === 'success') {
 		return (
 			<SuccessButton className={props?.className} type={props.type}>
-				<AiFillCheckCircle /> <span>Subscribed</span>
+				<AiFillCheckCircle /> <span>{props.successText}</span>
 			</SuccessButton>
 		)
 	}

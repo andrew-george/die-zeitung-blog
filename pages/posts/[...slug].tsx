@@ -1,35 +1,44 @@
+import { useEffect } from 'react'
+import { dehydrate, QueryClient, useMutation, useQuery } from 'react-query'
 import FullPost from '../../components/posts/FullPost'
-import { PostDetails } from '../../components/posts/PostDetailsTypes'
-import { getAllPosts, getPostBySlug } from '../../utils'
+import { addOneRead, getAllPosts, getPostBySlug } from '../../utils'
 
-function SinglePostPage(props: { post: PostDetails }) {
-	if (!props.post) {
-		return (
-			<div>
-				<h1>Loading...</h1>
-			</div>
-		)
-	}
+function SinglePostPage(props: { slug: string }) {
+	const { data: post, isLoading } = useQuery(['single-post', props.slug], () =>
+		getPostBySlug(props.slug)
+	)
 
-	return <FullPost post={props.post} />
+	const { mutate } = useMutation('add-one-read', addOneRead)
+
+	if (isLoading) <h1>Loading...</h1>
+
+	useEffect(() => {
+		mutate({ id: post.id, postData: post })
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	return <FullPost post={post} />
 }
 
 export async function getStaticProps(context) {
 	const slug = context.params.slug[1]
-	const post = await getPostBySlug(slug)
+
+	const queryClient = new QueryClient()
+	await queryClient.prefetchQuery(['single-post', slug], () => getPostBySlug(slug))
 
 	return {
-		props: { post },
+		props: { dehydratedState: dehydrate(queryClient), slug },
 	}
 }
 
 export async function getStaticPaths() {
 	const posts = await getAllPosts()
-	const paths = []
+	const paths = posts.map(post => ({
+		params: {
+			slug: [post.year.toString(), post.slug],
+		},
+	}))
 
-	for (const key in posts) {
-		paths.push({ params: { slug: [posts[key].year, posts[key].slug] } })
-	}
 	return {
 		paths,
 		fallback: true,

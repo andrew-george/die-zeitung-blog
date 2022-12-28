@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import AuthButtons from './AuthButtons'
 import NavMenu from './NavMenu'
 
-function MobileNavMenu(props: { className?: string; menuToggleHandler: () => void }) {
+function MobileNavMenu(props: { className?: string }) {
 	return (
 		<Wrapper className={props.className}>
 			<div className='header'>
-				<FaBars className='hamburger-toggler' onClick={props.menuToggleHandler} />
+				<FaBars className='hamburger-toggler' />
 				<AuthButtons />
 			</div>
 			<NavMenu chevronDirection='right' />

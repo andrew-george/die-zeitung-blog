@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 function NavItem(props: {
 	title: string
-	dropdown?: string[]
+	dropdown?: number[]
 	path?: string
 	chevronDirection?: string
 }) {

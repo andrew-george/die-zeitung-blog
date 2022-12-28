@@ -1,21 +1,22 @@
+import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
-import { PostDetails } from '../../components/posts/PostDetailsTypes'
 import PostsGrid from '../../components/posts/PostsGrid'
-import { getAllPosts } from '../../utils'
+import { getAllPosts, getPostsByYear } from '../../utils'
 
-function AnnualFilter(props: { posts: PostDetails[]; year: string }) {
-	if (!props.posts) {
-		return (
-			<Wrapper>
-				<h1>Loading...</h1>
-			</Wrapper>
-		)
-	}
+function AnnualFilter(props: { year: string }) {
+	const { data: posts, isLoading } = useQuery(['posts-by-year', props.year], () =>
+		getPostsByYear(+props.year)
+	)
+
+	if (isLoading)
+		<Wrapper>
+			<h1>Loading...</h1>
+		</Wrapper>
 
 	return (
 		<Wrapper>
 			<h1>All Posts of {props.year}</h1>
-			<PostsGrid posts={props.posts} />
+			<PostsGrid posts={posts} />
 		</Wrapper>
 	)
 }
@@ -33,29 +34,23 @@ const Wrapper = styled.div`
 `
 
 export async function getStaticProps(context) {
-	const { year } = context.params
-	const allPosts = await getAllPosts()
+	const year = context.params.year
 
-	const posts = []
-
-	for (const key in allPosts) {
-		if (allPosts[key].year === year) {
-			posts.push(allPosts[key])
-		}
-	}
+	const queryClient = new QueryClient()
+	await queryClient.prefetchQuery(['posts-by-year', year], () => getPostsByYear(+year))
 
 	return {
-		props: { posts, year },
+		props: { dehydratedState: dehydrate(queryClient), year },
 	}
 }
 
 export async function getStaticPaths() {
 	const posts = await getAllPosts()
-	const paths = []
-
-	for (const key in posts) {
-		paths.push({ params: { year: posts[key].year } })
-	}
+	const paths = posts.map(post => ({
+		params: {
+			year: post.year.toString(),
+		},
+	}))
 
 	return {
 		paths,

@@ -12,11 +12,6 @@ function Layout(props: { children: React.ReactNode }) {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
 	const { user } = useUser()
-	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false)
-
-	function menuToggleHandler() {
-		setIsHamburgerMenuOpen(prevState => !prevState)
-	}
 
 	useEffect(() => {
 		const themeFromLS = JSON.parse(localStorage.getItem('theme'))
@@ -36,12 +31,9 @@ function Layout(props: { children: React.ReactNode }) {
 
 	return (
 		<Wrapper className={`${theme}-theme`}>
-			<MobileNavMenu
-				menuToggleHandler={menuToggleHandler}
-				className={isHamburgerMenuOpen ? 'menu-reveal' : ''}
-			/>
+			<MobileNavMenu />
 			<Navbar />
-			<MobileNavbar menuToggleHandler={menuToggleHandler} />
+			<MobileNavbar />
 			<ChildrenWrapper>{props.children}</ChildrenWrapper>
 			<Footer />
 		</Wrapper>
