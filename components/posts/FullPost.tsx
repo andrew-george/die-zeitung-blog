@@ -14,7 +14,7 @@ function FullPost(props: { post }) {
 	const { year, month, title, author, authorImage, intro, image, content, id, userSub, reads } =
 		props.post
 
-	const { user, isLoading } = useUser()
+	const { user } = useUser()
 
 	const router = useRouter()
 
@@ -30,10 +30,6 @@ function FullPost(props: { post }) {
 		month: 'long',
 		year: 'numeric',
 	})
-
-	if (isLoading) {
-		return <h1>Loading</h1>
-	}
 
 	return (
 		<Wrapper>

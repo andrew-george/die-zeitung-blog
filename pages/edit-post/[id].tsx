@@ -1,7 +1,6 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -17,14 +16,7 @@ function EditPost(props: { id; post: PostDetails }) {
 
 	const { mutate, status, reset } = useMutation('edit-post', editPost)
 
-	const { user, isLoading } = useUser()
-
-	// useEffect(() => {
-	// 	if (!isLoading && !!user == false) {
-	// 		router.replace('/')
-	// 	}
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [])
+	const { user } = useUser()
 
 	function constructPostObject(values): PostDetails {
 		return {
@@ -76,7 +68,7 @@ function EditPost(props: { id; post: PostDetails }) {
 		},
 	})
 
-	if (!props.post || !user) {
+	if (!props.post || !!user == false) {
 		return (
 			<Wrapper>
 				<h2>Loading...</h2>

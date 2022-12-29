@@ -6,39 +6,8 @@ import FullPost from '../components/posts/FullPost'
 import { getMostReadPosts, getMostRecentPost } from '../utils'
 
 function HomePage() {
-	const { data: featuredPosts, isLoading: isFeaturedPostsLoading } = useQuery(
-		'featured-posts',
-		getMostReadPosts
-	)
-	const { data: mostRecentPost, isLoading: isMostRecentPostsLoading } = useQuery(
-		'most-recent-post',
-		getMostRecentPost
-	)
-
-	if (isMostRecentPostsLoading) {
-		return (
-			<Wrapper>
-				<MainPageHeader />
-				<div className='section-title'>
-					<h1>Most Recent</h1>
-				</div>
-				<h2>Loading...</h2>
-				<FeaturedPosts featuredPosts={featuredPosts} />
-			</Wrapper>
-		)
-	}
-	if (isFeaturedPostsLoading) {
-		return (
-			<Wrapper>
-				<MainPageHeader />
-				<div className='section-title'>
-					<h1>Most Recent</h1>
-				</div>
-				<FullPost post={mostRecentPost} />
-				<h2>Loading...</h2>
-			</Wrapper>
-		)
-	}
+	const { data: featuredPosts } = useQuery('featured-posts', getMostReadPosts)
+	const { data: mostRecentPost } = useQuery('most-recent-post', getMostRecentPost)
 
 	return (
 		<Wrapper>
