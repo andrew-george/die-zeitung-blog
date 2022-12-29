@@ -1,24 +1,28 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { GoChevronDown, GoChevronRight } from 'react-icons/go'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { closeSideMenu, toggleSideMenu } from '../../redux/store'
 
 function NavItem(props: {
 	title: string
 	dropdown?: number[]
 	path?: string
+	className?: string
 	chevronDirection?: string
 }) {
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(true)
+	const dispatch = useDispatch()
 
 	function submenuHandler() {
 		setIsMenuCollapsed(prevState => !prevState)
 	}
 
 	return (
-		<Wrapper className='nav-item'>
+		<Wrapper className={`nav-item ${props.className}`}>
 			{props.path && (
-				<Link href={props.path}>
+				<Link href={props.path} onClick={() => dispatch(closeSideMenu())}>
 					<li className='main-list-item' onClick={submenuHandler}>
 						{props.title}
 						{props.dropdown && <GoChevronDown />}
@@ -38,7 +42,11 @@ function NavItem(props: {
 				<ul className={`${isMenuCollapsed ? 'collapsed dropdown' : 'dropdown'}`}>
 					{props.dropdown?.map((dropdownItem, index) => {
 						return (
-							<Link key={index} href={`/posts/${dropdownItem}`}>
+							<Link
+								key={index}
+								href={`/posts/${dropdownItem}`}
+								onClick={() => dispatch(closeSideMenu())}
+							>
 								<li
 									className='dropdown-item'
 									onClick={() => {
@@ -68,7 +76,7 @@ const Wrapper = styled.div`
 		text-align: center;
 		padding: 0.5rem 1.5rem;
 		width: fit-content;
-		background-color: #000000;
+		background-color: #55555522;
 		border-radius: 5px;
 		position: absolute;
 		top: 70px;
@@ -78,12 +86,13 @@ const Wrapper = styled.div`
 	.dropdown-item {
 		padding: 5px 0;
 		transition: 0.3s ease all;
-		font-size: 0.8em;
+		font-size: 0.8rem;
 		font-weight: 600;
-		color: #aaa;
+		/* color: #aaa; */
 
 		&:hover {
-			color: #fff;
+			font-size: 0.85rem;
+			/* color: #fff; */
 		}
 	}
 

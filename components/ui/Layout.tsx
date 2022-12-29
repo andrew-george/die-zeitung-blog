@@ -10,6 +10,7 @@ import Footer from './Footer'
 
 function Layout(props: { children: React.ReactNode }) {
 	const theme = useSelector((store: RootState) => store.theme)
+	const isSideMenuOpen = useSelector((store: RootState) => store.sideMenu)
 	const dispatch = useDispatch()
 	const { user } = useUser()
 
@@ -37,9 +38,9 @@ function Layout(props: { children: React.ReactNode }) {
 
 	return (
 		<Wrapper className={`${theme}-theme`}>
-			<MobileNavMenu />
-			<Navbar />
+			{isSideMenuOpen && <MobileNavMenu />}
 			<MobileNavbar />
+			<Navbar />
 			<ChildrenWrapper>{props.children}</ChildrenWrapper>
 			<Footer />
 		</Wrapper>

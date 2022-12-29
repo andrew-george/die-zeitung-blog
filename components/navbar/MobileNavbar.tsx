@@ -2,13 +2,15 @@ import { FaBars } from 'react-icons/fa'
 import { TbBulb, TbBulbOff } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { toggleTheme } from '../../redux/store'
+import { toggleSideMenu, toggleTheme } from '../../redux/store'
 import Logo from '../ui/Logo'
 
 import type { RootState } from '../../redux/store'
 import AuthButtons from './AuthButtons'
 
 function MobileNavbar() {
+	const isSideMenuOpen = useSelector((store: RootState) => store.sideMenu)
+
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
 
@@ -19,7 +21,7 @@ function MobileNavbar() {
 	return (
 		<NavWrapper>
 			<div className='nav-left'>
-				<FaBars className='hamburger-toggler' />
+				<FaBars className='hamburger-toggler' onClick={() => dispatch(toggleSideMenu())} />
 				{theme === 'dark' ? (
 					<TbBulb className='theme-toggler' onClick={themeToggleHandler} />
 				) : (
@@ -36,7 +38,7 @@ function MobileNavbar() {
 
 const NavWrapper = styled.nav`
 	font-weight: 500;
-	max-width: 90%;
+	width: 90%;
 	margin: 0 auto;
 	height: 100px;
 	display: none;

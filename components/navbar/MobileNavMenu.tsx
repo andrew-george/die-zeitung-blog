@@ -1,58 +1,54 @@
-import { FaBars } from 'react-icons/fa'
+import { useUser } from '@auth0/nextjs-auth0/client'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { RootState, toggleSideMenu, toggleTheme } from '../../redux/store'
+import Button from '../ui/Button'
 import AuthButtons from './AuthButtons'
+import MobileNavbar from './MobileNavbar'
 import NavMenu from './NavMenu'
 
-function MobileNavMenu(props: { className?: string }) {
+function MobileNavMenu() {
+	const theme = useSelector((store: RootState) => store.theme)
+
+	const { user, isLoading } = useUser()
+
+	const dispatch = useDispatch()
+
 	return (
-		<Wrapper className={props.className}>
-			<div className='header'>
-				<FaBars className='hamburger-toggler' />
-				<AuthButtons />
-			</div>
+		<Wrapper>
+			<MobileNavbar />
 			<NavMenu chevronDirection='right' />
+			{!!user && (
+				<div className='auth'>
+					<Button className='logout-btn' type='button' theme={theme} style='none'>
+						<a href='/api/auth/logout'>Logout</a>
+					</Button>
+				</div>
+			)}
 		</Wrapper>
 	)
 }
 
 const Wrapper = styled.div`
-	display: flex;
+	display: none;
 	flex-direction: column;
 	align-items: flex-start;
 	width: 100vw;
-	height: 50vh;
+	height: 100vh;
 	position: fixed;
 	background-color: inherit;
 	z-index: 10;
 	transition: all ease 0.3s;
-	padding: 1rem;
-	transform: translateY(-200vw);
 
-	.header {
-		width: 90%;
-		margin: 1rem auto;
+	@media (max-width: 768px) {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-
-		.auth {
-			display: flex;
-		}
-
-		.hamburger-toggler {
-			font-size: 1.1rem;
-		}
-	}
-
-	&.menu-reveal {
-		transform: translateY(0);
 	}
 
 	.nav-menu {
 		flex-direction: column;
 		align-items: flex-start;
 		width: 100%;
+		margin-bottom: 3rem;
 
 		.nav-item {
 			font-size: 1.2rem;
@@ -68,22 +64,27 @@ const Wrapper = styled.div`
 			background-color: inherit;
 			border-radius: 5px;
 			position: absolute;
-			left: 30px;
-			top: 35px;
-			transition: 0.2s ease all;
+			left: 150px;
+			top: -2px;
+			transition: 0.1s ease all;
 
 			&.collapsed {
 				display: block;
-				transform: translateX(-100px);
+				transform: translateX(-200px);
 			}
 
 			.dropdown-item {
 				padding: 5px 0;
-				font-size: 0.9em;
+				font-size: 0.9rem;
 				font-weight: 600;
-				color: #000000;
+				/* color: #000000; */
 			}
 		}
+	}
+
+	.logout-btn {
+		font-size: 1rem;
+		font-weight: 700;
 	}
 `
 

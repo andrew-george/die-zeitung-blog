@@ -34,10 +34,24 @@ export const userSlice = createSlice({
 	},
 })
 
+export const sideMenuSlice = createSlice({
+	name: 'sideMenu',
+	initialState: false,
+	reducers: {
+		toggleSideMenu(state) {
+			return !state
+		},
+		closeSideMenu(state) {
+			return (state = false)
+		},
+	},
+})
+
 export const store = configureStore({
 	reducer: {
 		theme: themeSlice.reducer,
 		user: userSlice.reducer,
+		sideMenu: sideMenuSlice.reducer,
 	},
 })
 
@@ -45,4 +59,5 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
 export const { toggleTheme, setTheme } = themeSlice.actions
+export const { toggleSideMenu, closeSideMenu } = sideMenuSlice.actions
 export const { setUser } = userSlice.actions
