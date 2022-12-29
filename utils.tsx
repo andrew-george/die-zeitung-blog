@@ -4,7 +4,7 @@ import { PostDetails } from './components/posts/PostDetailsTypes'
 //- GET
 export async function getAllPosts(): Promise<PostDetails[]> {
 	const response = await axios('https://zeitung-4e991-default-rtdb.firebaseio.com/posts.json')
-	return Object.values(response.data)
+	return Object.values(await response.data)
 }
 
 export async function getNavMenuYears() {

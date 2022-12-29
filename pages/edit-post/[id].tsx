@@ -2,7 +2,7 @@ import { useUser } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import * as yup from 'yup'
@@ -12,15 +12,15 @@ import { RootState } from '../../redux/store'
 import { editPost, getAllPosts, getPostById } from '../../utils'
 
 function EditPost(props: { id; post: PostDetails }) {
-	const theme = useSelector((store: RootState) => store.theme)
 	const router = useRouter()
+	const theme = useSelector((store: RootState) => store.theme)
 
 	const { mutate, status, reset } = useMutation('edit-post', editPost)
 
 	const { user, isLoading } = useUser()
 
 	useEffect(() => {
-		if (!user) {
+		if (!isLoading && !user) {
 			router.replace('/')
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,9 +28,9 @@ function EditPost(props: { id; post: PostDetails }) {
 
 	function constructPostObject(values): PostDetails {
 		return {
-			id: props.id,
-			slug: values.title.toLowerCase().split(' ').join('-'),
+			id: props.post.id,
 			title: values.title,
+			slug: values.title.toLowerCase().split(' ').join('-'),
 			intro: values.intro,
 			content: values.content,
 			image: values.image,
@@ -39,17 +39,17 @@ function EditPost(props: { id; post: PostDetails }) {
 			author: user.name,
 			userSub: user.sub,
 			authorImage: user.picture,
-			reads: 10,
+			reads: props.post.reads,
 		}
 	}
 
 	const formik = useFormik({
 		//- INITIAL VALUES
 		initialValues: {
-			title: props.post.title,
-			intro: props.post.intro,
-			image: props.post.image,
-			content: props.post.content,
+			title: props.post?.title,
+			intro: props.post?.intro,
+			image: props.post?.image,
+			content: props.post?.content,
 		},
 		//- VALIDATION
 		validationSchema: yup.object({
@@ -76,7 +76,7 @@ function EditPost(props: { id; post: PostDetails }) {
 		},
 	})
 
-	if (isLoading || !user) {
+	if (!props.post || !user) {
 		return (
 			<Wrapper>
 				<h2>Loading...</h2>

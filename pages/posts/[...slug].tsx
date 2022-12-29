@@ -10,12 +10,14 @@ function SinglePostPage(props: { slug: string }) {
 
 	const { mutate } = useMutation('add-one-read', addOneRead)
 
-	if (isLoading) <h1>Loading...</h1>
-
 	useEffect(() => {
 		mutate({ id: post.id, postData: post })
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		//eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	if (isLoading) {
+		return <h1>Loading...</h1>
+	}
 
 	return <FullPost post={post} />
 }
