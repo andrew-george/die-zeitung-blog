@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
 import PostsGrid from '../../components/posts/PostsGrid'
@@ -15,6 +16,9 @@ function AnnualFilter(props: { year: string }) {
 
 	return (
 		<Wrapper>
+			<Head>
+				<title>Posts of {props.year}</title>
+			</Head>
 			<h1>All Posts of {props.year}</h1>
 			<PostsGrid posts={posts} />
 		</Wrapper>

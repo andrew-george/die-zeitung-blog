@@ -1,9 +1,11 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import Swal from 'sweetalert2'
 import * as yup from 'yup'
 import { PostDetails } from '../../components/posts/PostDetailsTypes'
 import Button from '../../components/ui/Button'
@@ -14,7 +16,29 @@ function EditPost(props: { id; post: PostDetails }) {
 	const router = useRouter()
 	const theme = useSelector((store: RootState) => store.theme)
 
-	const { mutate, status, reset } = useMutation('edit-post', editPost)
+	const { mutate, status, reset } = useMutation('edit-post', editPost, {
+		onSuccess: (data, variables, context) => {
+			formik.values.title = ''
+			formik.values.intro = ''
+			formik.values.image = ''
+			formik.values.content = ''
+
+			Swal.fire({
+				toast: true,
+				heightAuto: true,
+				icon: 'success',
+				titleText: 'Post has been edited!',
+				showCancelButton: false,
+				showConfirmButton: false,
+				background: `${theme === 'light' ? '#fff' : '#111'}`,
+				color: `${theme === 'light' ? '#111' : '#fff'}`,
+				position: 'center',
+				timer: 1000,
+			})
+			reset()
+			router.replace(`/posts/${variables.postData.year}/${variables.postData.slug}`)
+		},
+	})
 
 	const { user } = useUser()
 
@@ -55,16 +79,6 @@ function EditPost(props: { id; post: PostDetails }) {
 		async onSubmit(values) {
 			const postData = constructPostObject(values)
 			mutate({ id: postData.id, postData })
-
-			formik.values.title = ''
-			formik.values.intro = ''
-			formik.values.image = ''
-			formik.values.content = ''
-
-			setTimeout(() => {
-				reset()
-			}, 3000)
-			router.replace(`/posts/${postData.year}/${postData.slug}`)
 		},
 	})
 
@@ -78,6 +92,9 @@ function EditPost(props: { id; post: PostDetails }) {
 
 	return (
 		<Wrapper>
+			<Head>
+				<title>Edit Post</title>
+			</Head>
 			<h1>Edit Post</h1>
 			<form onSubmit={formik.handleSubmit}>
 				<div className='form-control'>

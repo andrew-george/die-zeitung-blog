@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
 import MainPageHeader from '../components/main-page-header/MainPageHeader'
@@ -11,6 +12,9 @@ function HomePage() {
 
 	return (
 		<Wrapper>
+			<Head>
+				<title>Home Page</title>
+			</Head>
 			<MainPageHeader />
 			<div className='section-title'>
 				<h1>Most Recent</h1>

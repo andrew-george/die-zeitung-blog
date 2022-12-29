@@ -6,6 +6,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import Swal from 'sweetalert2'
 import { RootState } from '../../redux/store'
 import { deletePost } from '../../utils'
 import Button from '../ui/Button'
@@ -20,6 +21,18 @@ function FullPost(props: { post }) {
 
 	const { mutate } = useMutation('delete-post', deletePost, {
 		onSuccess: () => {
+			Swal.fire({
+				toast: true,
+				heightAuto: true,
+				icon: 'success',
+				titleText: 'Post has been deleted!',
+				showCancelButton: false,
+				showConfirmButton: false,
+				background: `${theme === 'light' ? '#fff' : '#111'}`,
+				color: `${theme === 'light' ? '#111' : '#fff'}`,
+				position: 'center',
+				timer: 1000,
+			})
 			router.replace('/dashboard')
 		},
 	})
@@ -55,7 +68,22 @@ function FullPost(props: { post }) {
 						style='fill'
 						theme={theme}
 						type='button'
-						onClick={() => mutate(id)}
+						onClick={() => {
+							Swal.fire({
+								title: 'Are you sure?',
+								text: "You won't be able to revert this!",
+								showCancelButton: true,
+								confirmButtonColor: '#d34d4d',
+								cancelButtonColor: '#b2b2b2',
+								confirmButtonText: 'Yes, delete it!',
+								color: `${theme === 'light' ? '#111' : '#fff'}`,
+								background: `${theme === 'light' ? '#fff' : '#111'}`,
+							}).then(result => {
+								if (result.isConfirmed) {
+									mutate(id)
+								}
+							})
+						}}
 					>
 						<FaTrash />
 						Delete

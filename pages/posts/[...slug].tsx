@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useEffect } from 'react'
 import { dehydrate, QueryClient, useMutation, useQuery } from 'react-query'
 import FullPost from '../../components/posts/FullPost'
@@ -19,7 +20,14 @@ function SinglePostPage(props: { slug: string }) {
 		return <h1>Loading...</h1>
 	}
 
-	return <FullPost post={post} />
+	return (
+		<>
+			<Head>
+				<title>{post.title}</title>
+			</Head>
+			<FullPost post={post} />
+		</>
+	)
 }
 
 export async function getStaticProps(context) {

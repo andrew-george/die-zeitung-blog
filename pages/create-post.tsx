@@ -1,11 +1,12 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
 import { nanoid } from 'nanoid'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import Swal from 'sweetalert2'
 import * as yup from 'yup'
 import { PostDetails } from '../components/posts/PostDetailsTypes'
 import Button from '../components/ui/Button'
@@ -15,7 +16,25 @@ import { createPost } from '../utils'
 function CreatePost() {
 	const theme = useSelector((store: RootState) => store.theme)
 
-	const { mutate, status, reset } = useMutation('create-post', createPost)
+	const { mutate, status, reset } = useMutation('create-post', createPost, {
+		onSuccess: (data, variables, context) => {
+			Swal.fire({
+				toast: true,
+				heightAuto: true,
+				icon: 'success',
+				titleText: 'Post has been created!',
+				showCancelButton: false,
+				showConfirmButton: false,
+				background: `${theme === 'light' ? '#fff' : '#111'}`,
+				color: `${theme === 'light' ? '#111' : '#fff'}`,
+				position: 'center',
+				timer: 1000,
+			})
+			formik.resetForm()
+			reset()
+			router.replace(`/posts/${variables.year}/${variables.slug}`)
+		},
+	})
 	const router = useRouter()
 
 	const { user } = useUser()
@@ -57,11 +76,6 @@ function CreatePost() {
 		async onSubmit(values) {
 			const postData = constructPostObject(values)
 			mutate(postData)
-			formik.resetForm()
-			setTimeout(() => {
-				reset()
-			}, 3000)
-			router.replace(`/posts/${postData.year}/${postData.slug}`)
 		},
 	})
 
@@ -75,6 +89,9 @@ function CreatePost() {
 
 	return (
 		<Wrapper>
+			<Head>
+				<title>Create Post</title>
+			</Head>
 			<h1>Create Post</h1>
 			<form onSubmit={formik.handleSubmit}>
 				<div className='form-control'>

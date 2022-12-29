@@ -1,4 +1,5 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
+import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -28,6 +29,9 @@ function Dashboard() {
 
 	return (
 		<Wrapper>
+			<Head>
+				<title>Dashboard</title>
+			</Head>
 			<div className='user-info'>
 				<h1 className='title'>Dashboard</h1>
 				<h2 className='user-greeting'>

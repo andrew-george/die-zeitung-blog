@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
 import PostsGrid from '../../components/posts/PostsGrid'
@@ -13,6 +14,9 @@ function AllPostsPage() {
 
 	return (
 		<Wrapper>
+			<Head>
+				<title>All Posts</title>
+			</Head>
 			<h1>All Posts</h1>
 			<PostsGrid posts={posts} />
 		</Wrapper>
