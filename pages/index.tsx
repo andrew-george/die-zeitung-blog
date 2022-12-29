@@ -15,27 +15,11 @@ function HomePage() {
 		getMostRecentPost
 	)
 
-	if (isMostRecentPostsLoading) {
+	if (isMostRecentPostsLoading || isFeaturedPostsLoading) {
 		return (
 			<Wrapper>
 				<MainPageHeader />
-				<div className='section-title'>
-					<h1>Most Recent</h1>
-				</div>
-				<h2>Loading...</h2>
-				<FeaturedPosts featuredPosts={featuredPosts} />
-			</Wrapper>
-		)
-	}
-	if (isFeaturedPostsLoading) {
-		return (
-			<Wrapper>
-				<MainPageHeader />
-				<div className='section-title'>
-					<h1>Most Recent</h1>
-				</div>
-				<FullPost post={mostRecentPost} />
-				<h2>Loading...</h2>
+				<h1>Loading...</h1>
 			</Wrapper>
 		)
 	}
