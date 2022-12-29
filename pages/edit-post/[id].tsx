@@ -1,8 +1,8 @@
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import * as yup from 'yup'
@@ -19,12 +19,12 @@ function EditPost(props: { id; post: PostDetails }) {
 
 	const { user, isLoading } = useUser()
 
-	useEffect(() => {
-		if (!isLoading && !user) {
-			router.replace('/')
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	// useEffect(() => {
+	// 	if (!isLoading && !!user == false) {
+	// 		router.replace('/')
+	// 	}
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [])
 
 	function constructPostObject(values): PostDetails {
 		return {
@@ -224,6 +224,7 @@ const Wrapper = styled.div`
 		border-radius: 5px;
 	}
 `
+
 export async function getStaticProps(context) {
 	const { id } = context.params
 	const post = await getPostById(id)
@@ -246,4 +247,4 @@ export async function getStaticPaths() {
 		fallback: true,
 	}
 }
-export default EditPost
+export default withPageAuthRequired(EditPost)

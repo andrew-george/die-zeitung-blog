@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -18,14 +18,7 @@ function Dashboard() {
 	const router = useRouter()
 	const { data: userPosts, isLoading } = useQuery('user-posts', () => getPostByUserSub(user?.sub))
 
-	useEffect(() => {
-		if (!user) {
-			router.replace('/')
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	if (isLoading || !user) {
+	if (isLoading || !!user == false) {
 		return (
 			<Wrapper>
 				<h2>Loading...</h2>
@@ -110,4 +103,4 @@ const Wrapper = styled.div`
 	}
 `
 
-export default Dashboard
+export default withPageAuthRequired(Dashboard)

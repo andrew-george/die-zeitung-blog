@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
 import { nanoid } from 'nanoid'
 import { useRouter } from 'next/router'
@@ -19,13 +19,6 @@ function CreatePost() {
 	const router = useRouter()
 
 	const { user } = useUser()
-
-	useEffect(() => {
-		if (!user) {
-			router.replace('/')
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
 
 	function constructPostObject(values): PostDetails {
 		return {
@@ -72,7 +65,7 @@ function CreatePost() {
 		},
 	})
 
-	if (!user) {
+	if (!!user == false) {
 		return (
 			<Wrapper>
 				<h1>Loading...</h1>
@@ -221,4 +214,4 @@ const Wrapper = styled.div`
 	}
 `
 
-export default CreatePost
+export default withPageAuthRequired(CreatePost)

@@ -14,17 +14,23 @@ function Layout(props: { children: React.ReactNode }) {
 	const { user } = useUser()
 
 	useEffect(() => {
+		localStorage.setItem('theme', JSON.stringify(theme))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	useEffect(() => {
+		// const themeFromLS = JSON.parse(localStorage.getItem('theme'))
 		const themeFromLS = JSON.parse(localStorage.getItem('theme'))
 		dispatch(setTheme(themeFromLS))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [theme])
 
 	useEffect(() => {
-		if (user) {
+		if (!!user == true) {
 			const userFromLs = JSON.parse(localStorage.getItem('user'))
 			dispatch(setUser(userFromLs))
 		} else {
-			dispatch(setUser({}))
+			dispatch(setUser(null))
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user])

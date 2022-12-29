@@ -15,7 +15,11 @@ function AuthButtons() {
 	const { user, isLoading } = useUser()
 
 	useEffect(() => {
-		dispatch(setUser(user))
+		if (!!user == false) {
+			dispatch(setUser(null))
+		} else {
+			dispatch(setUser(user))
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user])
 
@@ -33,7 +37,7 @@ function AuthButtons() {
 
 	return (
 		<AuthButtonsWrapper>
-			{user ? (
+			{!!user == true ? (
 				<div className='auth'>
 					<Button className='logout-btn' type='button' theme={theme} style='none'>
 						<a href='/api/auth/logout'>Logout</a>
