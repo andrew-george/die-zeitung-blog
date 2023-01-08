@@ -2,7 +2,6 @@
 const nextConfig = {
 	reactStrictMode: false,
 	compiler: {
-		// ssr and displayName are configured by default
 		styledComponents: true,
 	},
 	images: {
@@ -29,6 +28,10 @@ const nextConfig = {
 			},
 		],
 	},
+	// i18n: {
+	// 	locales: ['en-US', 'ar-EG'],
+	// 	defaultLocale: 'en-US',
+	// },
 }
 
 module.exports = nextConfig

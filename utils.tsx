@@ -25,7 +25,13 @@ export async function getPostsByYear(year: number) {
 
 export async function getMostRecentPost() {
 	const currentYear = new Date().getFullYear()
-	const currentYearPosts = await getPostsByYear(currentYear)
+
+	let currentYearPosts
+	currentYearPosts = await getPostsByYear(currentYear)
+	if (currentYearPosts.length === 0) {
+		//- if no posts in current year get most recent post in last year
+		currentYearPosts = await getPostsByYear(currentYear - 1)
+	}
 	//- reduce that array to get the most recent post
 	return currentYearPosts.reduce((acc, current) => (current.month > acc.month ? current : acc))
 }
