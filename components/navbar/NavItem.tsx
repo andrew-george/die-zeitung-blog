@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { GoChevronDown, GoChevronRight } from 'react-icons/go'
 import { useDispatch } from 'react-redux'
@@ -14,6 +15,7 @@ function NavItem(props: {
 }) {
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(true)
 	const dispatch = useDispatch()
+	const { locale } = useRouter()
 
 	function submenuHandler() {
 		setIsMenuCollapsed(prevState => !prevState)
@@ -53,7 +55,9 @@ function NavItem(props: {
 										setIsMenuCollapsed(true)
 									}}
 								>
-									{dropdownItem}
+									{Intl.NumberFormat(locale, {
+										useGrouping: false,
+									}).format(dropdownItem)}
 								</li>
 							</Link>
 						)

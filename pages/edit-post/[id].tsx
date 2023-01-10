@@ -1,5 +1,7 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
@@ -13,7 +15,8 @@ import { RootState } from '../../redux/store'
 import { editPost, getAllPosts, getPostById } from '../../utils'
 
 function EditPost(props: { id; post: PostDetails }) {
-	const router = useRouter()
+	const { replace, locale } = useRouter()
+	const { t: translate } = useTranslation('dashboard')
 	const theme = useSelector((store: RootState) => store.theme)
 
 	const { mutate, status, reset } = useMutation('edit-post', editPost, {
@@ -27,7 +30,7 @@ function EditPost(props: { id; post: PostDetails }) {
 				toast: true,
 				heightAuto: true,
 				icon: 'success',
-				titleText: 'Post has been edited!',
+				titleText: translate('toast-edited'),
 				showCancelButton: false,
 				showConfirmButton: false,
 				background: `${theme === 'light' ? '#fff' : '#111'}`,
@@ -36,7 +39,7 @@ function EditPost(props: { id; post: PostDetails }) {
 				timer: 1000,
 			})
 			reset()
-			router.replace(`/posts/${variables.postData.year}/${variables.postData.slug}`)
+			replace(`/posts/${variables.postData.year}/${variables.postData.slug}`)
 		},
 	})
 
@@ -69,10 +72,10 @@ function EditPost(props: { id; post: PostDetails }) {
 		},
 		//- VALIDATION
 		validationSchema: yup.object({
-			title: yup.string().required(),
-			intro: yup.string().required(),
-			image: yup.string().required().url(),
-			content: yup.string().required(),
+			title: yup.string().required(translate('required-field')),
+			intro: yup.string().required(translate('required-field')),
+			image: yup.string().required(translate('required-field')).url(translate('url-error')),
+			content: yup.string().required(translate('required-field')),
 		}),
 
 		//- SUBMISSION
@@ -85,7 +88,7 @@ function EditPost(props: { id; post: PostDetails }) {
 	if (!props.post || !!user == false) {
 		return (
 			<Wrapper>
-				<h2>Loading...</h2>
+				<h2>{translate('common:loading')}</h2>
 			</Wrapper>
 		)
 	}
@@ -93,19 +96,20 @@ function EditPost(props: { id; post: PostDetails }) {
 	return (
 		<Wrapper>
 			<Head>
-				<title>Edit Post</title>
+				<title>{translate('edit-post')}</title>
 			</Head>
-			<h1>Edit Post</h1>
+			<h1 className={`${locale === 'en-US' && 'serif'}`}>{translate('edit-post')}</h1>
 			<form onSubmit={formik.handleSubmit}>
 				<div className='form-control'>
-					<label htmlFor='title'>Title</label>
+					<label htmlFor='title'>{translate('title')}</label>
 					<input
 						type='text'
 						name='title'
-						placeholder='title'
+						placeholder={translate('title')}
 						value={formik.values.title}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					/>
 					{formik.touched.title && formik.errors.title && (
 						<p className='error-msg'>{formik.errors.title}</p>
@@ -113,14 +117,15 @@ function EditPost(props: { id; post: PostDetails }) {
 				</div>
 
 				<div className='form-control'>
-					<label htmlFor='intro'>Intro</label>
+					<label htmlFor='intro'>{translate('intro')}</label>
 					<textarea
 						name='intro'
-						placeholder='intro'
+						placeholder={translate('intro')}
 						rows={4}
 						value={formik.values.intro}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					></textarea>
 					{formik.touched.intro && formik.errors.intro && (
 						<p className='error-msg'>{formik.errors.intro}</p>
@@ -128,14 +133,15 @@ function EditPost(props: { id; post: PostDetails }) {
 				</div>
 
 				<div className='form-control'>
-					<label htmlFor='image'>Image</label>
+					<label htmlFor='image'>{translate('image')}</label>
 					<input
 						type='url'
 						name='image'
-						placeholder='enter image url from unsplash.com'
+						placeholder={translate('image-placeholder')}
 						value={formik.values.image}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					/>
 					{formik.touched.image && formik.errors.image && (
 						<p className='error-msg'>{formik.errors.image}</p>
@@ -143,14 +149,15 @@ function EditPost(props: { id; post: PostDetails }) {
 				</div>
 
 				<div className='form-control'>
-					<label htmlFor='content'>Content</label>
+					<label htmlFor='content'>{translate('content')}</label>
 					<textarea
 						name='content'
-						placeholder='content'
+						placeholder={translate('content')}
 						rows={6}
 						value={formik.values.content}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					></textarea>
 					{formik.touched.content && formik.errors.content && (
 						<p className='error-msg'>{formik.errors.content}</p>
@@ -163,9 +170,9 @@ function EditPost(props: { id; post: PostDetails }) {
 					style='fill'
 					theme={theme}
 					type='submit'
-					successText='Post Edited'
+					successText={translate('post-edited')}
 				>
-					Edit Post
+					{translate('edit-post')}
 				</Button>
 			</form>
 		</Wrapper>
@@ -181,7 +188,6 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 
 	h1 {
-		font-family: var(--font-dm-serif);
 		margin-bottom: 3rem;
 	}
 
@@ -205,8 +211,9 @@ const Wrapper = styled.div`
 		position: relative;
 
 		.error-msg {
+			width: 100%;
 			position: absolute;
-			bottom: -20px;
+			bottom: -25px;
 			color: #f86363;
 			font-size: 0.8rem;
 		}
@@ -234,12 +241,16 @@ const Wrapper = styled.div`
 	}
 `
 
-export async function getStaticProps(context) {
-	const { id } = context.params
+export async function getStaticProps({ params, locale }) {
+	const { id } = params
 	const post = await getPostById(id)
 
 	return {
-		props: { id, post },
+		props: {
+			id,
+			post,
+			...(await serverSideTranslations(locale, ['common', 'nav', 'post', 'home', 'dashboard'])),
+		},
 	}
 }
 

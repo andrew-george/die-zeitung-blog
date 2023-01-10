@@ -1,6 +1,8 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useFormik } from 'formik'
 import { nanoid } from 'nanoid'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
@@ -22,7 +24,7 @@ function CreatePost() {
 				toast: true,
 				heightAuto: true,
 				icon: 'success',
-				titleText: 'Post has been created!',
+				titleText: translate('toast-created'),
 				showCancelButton: false,
 				showConfirmButton: false,
 				background: `${theme === 'light' ? '#fff' : '#111'}`,
@@ -32,10 +34,11 @@ function CreatePost() {
 			})
 			formik.resetForm()
 			reset()
-			router.replace(`/posts/${variables.year}/${variables.slug}`)
+			replace(`/posts/${variables.year}/${variables.slug}`)
 		},
 	})
-	const router = useRouter()
+	const { replace, locale } = useRouter()
+	const { t: translate } = useTranslation(['dashboard', 'common'])
 
 	const { user } = useUser()
 
@@ -66,10 +69,10 @@ function CreatePost() {
 		},
 		//- VALIDATION
 		validationSchema: yup.object({
-			title: yup.string().required(),
-			intro: yup.string().required(),
-			image: yup.string().required().url(),
-			content: yup.string().required(),
+			title: yup.string().required(translate('required-field')),
+			intro: yup.string().required(translate('required-field')),
+			image: yup.string().required(translate('required-field')).url(translate('url-error')),
+			content: yup.string().required(translate('required-field')),
 		}),
 
 		//- SUBMISSION
@@ -82,7 +85,7 @@ function CreatePost() {
 	if (!!user == false) {
 		return (
 			<Wrapper>
-				<h1>Loading...</h1>
+				<h1>{translate('common:loading')}</h1>
 			</Wrapper>
 		)
 	}
@@ -90,19 +93,20 @@ function CreatePost() {
 	return (
 		<Wrapper>
 			<Head>
-				<title>Create Post</title>
+				<title>{translate('create-post')}</title>
 			</Head>
-			<h1>Create Post</h1>
+			<h1 className={`${locale === 'en-US' && 'serif'}`}>{translate('create-post')}</h1>
 			<form onSubmit={formik.handleSubmit}>
 				<div className='form-control'>
-					<label htmlFor='title'>Title</label>
+					<label htmlFor='title'>{translate('title')}</label>
 					<input
 						type='text'
 						name='title'
-						placeholder='title'
+						placeholder={translate('title')}
 						value={formik.values.title}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					/>
 					{formik.touched.title && formik.errors.title && (
 						<p className='error-msg'>{formik.errors.title}</p>
@@ -110,14 +114,15 @@ function CreatePost() {
 				</div>
 
 				<div className='form-control'>
-					<label htmlFor='intro'>Intro</label>
+					<label htmlFor='intro'>{translate('intro')}</label>
 					<textarea
 						name='intro'
-						placeholder='intro'
+						placeholder={translate('intro')}
 						rows={4}
 						value={formik.values.intro}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					></textarea>
 					{formik.touched.intro && formik.errors.intro && (
 						<p className='error-msg'>{formik.errors.intro}</p>
@@ -125,14 +130,15 @@ function CreatePost() {
 				</div>
 
 				<div className='form-control'>
-					<label htmlFor='image'>Image</label>
+					<label htmlFor='image'>{translate('image')}</label>
 					<input
 						type='url'
 						name='image'
-						placeholder='enter image url from unsplash.com'
+						placeholder={translate('image-placeholder')}
 						value={formik.values.image}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					/>
 					{formik.touched.image && formik.errors.image && (
 						<p className='error-msg'>{formik.errors.image}</p>
@@ -140,14 +146,15 @@ function CreatePost() {
 				</div>
 
 				<div className='form-control'>
-					<label htmlFor='content'>Content</label>
+					<label htmlFor='content'>{translate('content')}</label>
 					<textarea
 						name='content'
-						placeholder='content'
+						placeholder={translate('content')}
 						rows={6}
 						value={formik.values.content}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					></textarea>
 					{formik.touched.content && formik.errors.content && (
 						<p className='error-msg'>{formik.errors.content}</p>
@@ -160,9 +167,9 @@ function CreatePost() {
 					style='fill'
 					theme={theme}
 					type='submit'
-					successText='Post Created'
+					successText={translate('post-created')}
 				>
-					Create
+					{translate('create-post')}
 				</Button>
 			</form>
 		</Wrapper>
@@ -178,7 +185,6 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 
 	h1 {
-		font-family: var(--font-dm-serif);
 		margin-bottom: 3rem;
 	}
 
@@ -203,7 +209,8 @@ const Wrapper = styled.div`
 
 		.error-msg {
 			position: absolute;
-			bottom: -20px;
+			width: 100%;
+			bottom: -25px;
 			color: #f86363;
 			font-size: 0.8rem;
 		}
@@ -218,7 +225,7 @@ const Wrapper = styled.div`
 		resize: none;
 		border: 1px solid;
 		border-radius: 5px;
-		font-family: var(--font-inter);
+		font-family: inherit;
 		padding: 10px;
 	}
 
@@ -230,5 +237,11 @@ const Wrapper = styled.div`
 		border-radius: 5px;
 	}
 `
-
+export async function getStaticProps({ locale }) {
+	return {
+		props: {
+			...(await serverSideTranslations(locale, ['common', 'nav', 'post', 'home', 'dashboard'])),
+		},
+	}
+}
 export default withPageAuthRequired(CreatePost)

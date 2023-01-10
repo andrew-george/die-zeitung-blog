@@ -7,6 +7,7 @@ import AuthButtons from './AuthButtons'
 import NavMenu from './NavMenu'
 
 import type { RootState } from '../../redux/store'
+import LocaleSwitch from './LocaleSwitch'
 
 function Navbar() {
 	const theme = useSelector((store: RootState) => store.theme)
@@ -23,6 +24,7 @@ function Navbar() {
 				<NavMenu />
 			</div>
 			<div className='nav-right'>
+				<LocaleSwitch />
 				{theme === 'dark' ? (
 					<TbBulb onClick={themeToggleHandler} />
 				) : (

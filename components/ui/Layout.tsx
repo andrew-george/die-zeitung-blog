@@ -1,4 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -13,6 +14,8 @@ function Layout(props: { children: React.ReactNode }) {
 	const isSideMenuOpen = useSelector((store: RootState) => store.sideMenu)
 	const dispatch = useDispatch()
 	const { user } = useUser()
+
+	const { locale } = useRouter()
 
 	useEffect(() => {
 		localStorage.setItem('theme', JSON.stringify(theme))
@@ -37,7 +40,7 @@ function Layout(props: { children: React.ReactNode }) {
 	}, [user])
 
 	return (
-		<Wrapper className={`${theme}-theme`}>
+		<Wrapper className={`${theme}-theme ${locale === 'ar-EG' && 'arabic-text'}`}>
 			{isSideMenuOpen && <MobileNavMenu />}
 			<MobileNavbar />
 			<Navbar />

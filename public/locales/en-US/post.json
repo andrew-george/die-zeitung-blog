@@ -1,0 +1,14 @@
+{
+	"posted-on": "Posted on",
+	"reads": "reads",
+	"read-more": "Read more",
+	"all-posts": "All Posts",
+	"all-posts-of": "All Posts of",
+	"edit": "Edit",
+	"delete": "Delete",
+	"modal-title": "Are you sure?",
+	"modal-text": "You won't be able to revert this!",
+	"modal-confirm": "Yes, delete it!",
+	"modal-cancel": "Cancel",
+	"post-deleted": "Post has been deleted!"
+}

@@ -1,0 +1,18 @@
+{
+	"dashboard": "Dashboard",
+	"hello": "Hello",
+	"create-post": "Create Post",
+	"edit-post": "Edit Post",
+	"your-posts": "Your Post",
+	"title": "Title",
+	"intro": "Intro",
+	"image": "Image",
+	"image-placeholder": "Enter image url from unsplash.com",
+	"content": "Content",
+	"post-created": "Post Created",
+	"post-edited": "Post Edited",
+	"toast-created": "Post has been created!",
+	"toast-edited": "Post has been edited!",
+	"required-field": "This field is required",
+	"url-error": "This field must be a url"
+}

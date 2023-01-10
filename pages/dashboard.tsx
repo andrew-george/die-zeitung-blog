@@ -1,4 +1,6 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,13 +18,14 @@ import { getPostByUserSub } from '../utils'
 function Dashboard() {
 	const theme = useSelector((store: RootState) => store.theme)
 	const { user } = useUser()
-	const router = useRouter()
+	const { locale } = useRouter()
+	const { t: translate } = useTranslation(['dashboard', 'common'])
 	const { data: userPosts, isLoading } = useQuery('user-posts', () => getPostByUserSub(user?.sub))
 
 	if (isLoading || !!user == false) {
 		return (
 			<Wrapper>
-				<h2>Loading...</h2>
+				<h2>{translate('common:loading')}</h2>
 			</Wrapper>
 		)
 	}
@@ -30,24 +33,24 @@ function Dashboard() {
 	return (
 		<Wrapper>
 			<Head>
-				<title>Dashboard</title>
+				<title>{translate('dashboard')}</title>
 			</Head>
 			<div className='user-info'>
-				<h1 className='title'>Dashboard</h1>
+				<h1 className={`title ${locale === 'en-US' && 'serif'}`}>{translate('dashboard')}</h1>
 				<h2 className='user-greeting'>
-					Hello, <p>{user?.name}</p>
+					{translate('hello')}, <p>{user?.name}</p>
 				</h2>
 				<Image src={user?.picture} alt='profile picture' width={100} height={100} />
 				<Link href='/create-post'>
 					<Button className='add-btn' style='fill' theme={theme} type='button'>
 						<FaPlus />
-						Create Post
+						{translate('create-post')}
 					</Button>
 				</Link>
 			</div>
 			<div className='posts'>
-				<h2 className='title'>Your Posts</h2>
-				{userPosts ? <PostsGrid posts={userPosts} /> : <h2>Loading...</h2>}
+				<h2 className={`title ${locale === 'en-US' && 'serif'}`}>{translate('your-posts')}</h2>
+				{userPosts ? <PostsGrid posts={userPosts} /> : <h2>{translate('common:loading')}</h2>}
 			</div>
 		</Wrapper>
 	)
@@ -67,7 +70,6 @@ const Wrapper = styled.div`
 		margin-bottom: 6rem;
 
 		.title {
-			font-family: var(--font-dm-serif);
 			margin-bottom: 3rem;
 		}
 		.user-greeting {
@@ -101,10 +103,17 @@ const Wrapper = styled.div`
 		justify-content: center;
 		align-items: center;
 		.title {
-			font-family: var(--font-dm-serif);
 			margin-bottom: 3rem;
 		}
 	}
 `
+
+export async function getStaticProps({ locale }) {
+	return {
+		props: {
+			...(await serverSideTranslations(locale, ['common', 'nav', 'post', 'home', 'dashboard'])),
+		},
+	}
+}
 
 export default withPageAuthRequired(Dashboard)

@@ -1,0 +1,18 @@
+{
+	"dashboard": "لوحة التحكم",
+	"hello": "أهلاً",
+	"create-post": "مقالة جديدة",
+	"edit-post": "تعديل مقالة",
+	"your-posts": "مقالاتك",
+	"title": "العنوان",
+	"intro": "المقدمة",
+	"image": "صورة",
+	"image-placeholder": "unsplash.com ادخل عنوان صورة من",
+	"content": "المحتوى",
+	"post-created": "تم الإنشاء",
+	"post-edited": "تم التعديل",
+	"toast-created": "تم إنشاء المقالة",
+	"toast-edited": "تم تعديل المقالة",
+	"required-field": "هذا الحقل مطلوب",
+	"url-error": "url هذا الحقل يجب أن يكون"
+}

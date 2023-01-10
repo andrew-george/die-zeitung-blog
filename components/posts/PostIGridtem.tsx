@@ -1,11 +1,16 @@
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { PostDetails } from './PostDetailsTypes'
 
 function PostGridItem(props: { post: PostDetails }) {
 	const { id, title, intro, content, image, year, month, author, authorImage, reads } = props.post
 
-	const formattedDate = new Date(+year, +month).toLocaleDateString('en-US', {
+	const { locale } = useRouter()
+	const { t: translate } = useTranslation('post')
+
+	const formattedDate = new Date(+year, +month).toLocaleDateString(locale, {
 		month: 'long',
 		year: 'numeric',
 	})
@@ -17,10 +22,17 @@ function PostGridItem(props: { post: PostDetails }) {
 				<h4>{title}</h4>
 				<p className='intro'>
 					{intro.split(' ').slice(0, 7).join(' ')}
-					<span>...Read more</span>
+					<span>...{translate('read-more')}</span>
 				</p>
-				<p className='date'>Posted on {formattedDate}</p>
-				<p className='reads'>{reads} reads</p>
+				<p className='date'>
+					{translate('posted-on')} {formattedDate}
+				</p>
+				<p className='reads'>
+					{Intl.NumberFormat(locale, {
+						useGrouping: false,
+					}).format(reads)}{' '}
+					{translate('reads')}
+				</p>
 				<div className='author'>
 					<Image src={authorImage} alt={author} width={200} height={200} />
 					<p>{author}</p>
@@ -38,6 +50,7 @@ const Wrapper = styled.div`
 
 	.content {
 		opacity: 0;
+		width: 350px;
 		padding: 1rem;
 		position: absolute;
 		transition: 0.2s ease all;
@@ -53,7 +66,7 @@ const Wrapper = styled.div`
 		}
 
 		.intro {
-			font-size: 0.8rem;
+			font-size: 0.7rem;
 
 			span {
 				font-weight: 700;

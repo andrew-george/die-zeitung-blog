@@ -1,4 +1,7 @@
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
 import styled from 'styled-components'
 import PostsGrid from '../../components/posts/PostsGrid'
@@ -9,17 +12,30 @@ function AnnualFilter(props: { year: string }) {
 		getPostsByYear(+props.year)
 	)
 
+	const { t: translate } = useTranslation(['post', 'common'])
+	const { locale } = useRouter()
+
 	if (isLoading)
 		<Wrapper>
-			<h1>Loading...</h1>
+			<h1>{translate('common:loading')}</h1>
 		</Wrapper>
 
 	return (
 		<Wrapper>
 			<Head>
-				<title>Posts of {props.year}</title>
+				<title>
+					{translate('all-posts-of')}{' '}
+					{Intl.NumberFormat(locale, {
+						useGrouping: false,
+					}).format(+props.year)}
+				</title>
 			</Head>
-			<h1>All Posts of {props.year}</h1>
+			<h1 className={`${locale === 'en-US' && 'serif'}`}>
+				{translate('all-posts-of')}{' '}
+				{Intl.NumberFormat(locale, {
+					useGrouping: false,
+				}).format(+props.year)}
+			</h1>
 			<PostsGrid posts={posts} />
 		</Wrapper>
 	)
@@ -32,29 +48,43 @@ const Wrapper = styled.div`
 	align-items: center;
 
 	h1 {
-		font-family: var(--font-dm-serif);
 		margin-bottom: 3rem;
 	}
 `
 
-export async function getStaticProps(context) {
-	const year = context.params.year
+export async function getStaticProps({ locale, params }) {
+	const year = params.year
 
 	const queryClient = new QueryClient()
 	await queryClient.prefetchQuery(['posts-by-year', year], () => getPostsByYear(+year))
 
 	return {
-		props: { dehydratedState: dehydrate(queryClient), year },
+		props: {
+			dehydratedState: dehydrate(queryClient),
+			year,
+			...(await serverSideTranslations(locale, ['common', 'nav', 'header', 'post', 'home'])),
+		},
 	}
 }
 
 export async function getStaticPaths() {
 	const posts = await getAllPosts()
-	const paths = posts.map(post => ({
+
+	//- can be refactored to generate paths dynamically for each locale by getting locales array from next router and map a new array of paths for each locale
+	const enPaths = posts.map(post => ({
 		params: {
 			year: post.year.toString(),
 		},
+		locale: 'en-US',
 	}))
+	const arPaths = posts.map(post => ({
+		params: {
+			year: post.year.toString(),
+		},
+		locale: 'ar-EG',
+	}))
+
+	const paths = [...enPaths, ...arPaths]
 
 	return {
 		paths,

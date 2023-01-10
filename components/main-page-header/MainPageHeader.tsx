@@ -1,17 +1,18 @@
+import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import Newsletter from './NewsletterInput'
 
 function MainPageHeader() {
+	const { t: translate } = useTranslation('header')
+	const { locale } = useRouter()
+
 	return (
 		<Wrapper>
 			<div className='container'>
 				<div className='description'>
-					<h2>Hello, This is die Zeitung</h2>
-					<p>
-						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate nulla sint
-						consequuntur ipsa nam animi deleniti sit obcaecati soluta. Molestiae eum aliquam commodi
-						amet, totam laboriosam inventore esse pariatur ratione.
-					</p>
+					<h2 className={`${locale === 'en-US' && 'serif'}`}>{translate('header-title')}</h2>
+					<p>{translate('header-text')}</p>
 				</div>
 				<Newsletter />
 			</div>
@@ -24,7 +25,7 @@ const Wrapper = styled.header`
 	color: black;
 
 	.container {
-		width: 40%;
+		width: 60%;
 		padding: 2rem;
 		margin: 0 auto 3rem;
 		display: flex;
@@ -47,7 +48,6 @@ const Wrapper = styled.header`
 		margin-bottom: 1rem;
 
 		h2 {
-			font-family: var(--font-dm-serif);
 			font-size: 2rem;
 			padding: 1rem;
 

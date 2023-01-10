@@ -1,11 +1,16 @@
+import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { PostDetails } from './PostDetailsTypes'
 import PostsGrid from './PostsGrid'
 
 function FeaturedPosts(props: { featuredPosts: PostDetails[] }) {
+	const { t: translate } = useTranslation('home')
+	const { locale } = useRouter()
+
 	return (
 		<Wrapper>
-			<h2>Most Read</h2>
+			<h2 className={`${locale === 'en-US' && 'serif'}`}>{translate('most-read')}</h2>
 			<PostsGrid posts={props.featuredPosts} />
 		</Wrapper>
 	)
@@ -20,7 +25,6 @@ const Wrapper = styled.section`
 	margin: 0 auto 3rem;
 
 	h2 {
-		font-family: var(--font-dm-serif);
 		font-size: 1.8rem;
 		margin-bottom: 3rem;
 	}

@@ -6,11 +6,16 @@ import * as yup from 'yup'
 import { subscribeToNewsletter } from '../../utils'
 import Button from '../ui/Button'
 
+import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 import type { RootState } from '../../redux/store'
 
 function Newsletter() {
 	const theme = useSelector((store: RootState) => store.theme)
 	const { status, mutate, reset } = useMutation((email: string) => subscribeToNewsletter(email))
+
+	const { t: translate } = useTranslation('header')
+	const { locale } = useRouter()
 
 	const formik = useFormik({
 		//- INITIAL VALUES
@@ -19,7 +24,7 @@ function Newsletter() {
 		},
 		//- VALIDATION
 		validationSchema: yup.object({
-			email: yup.string().email('Invalid Email!').required('Please enter your email!'),
+			email: yup.string().email(translate('invalid-email')).required(translate('empty-email')),
 		}),
 		//- SUBMISSION
 		async onSubmit(values) {
@@ -33,16 +38,17 @@ function Newsletter() {
 
 	return (
 		<Wrapper>
-			<h4>Subscribe to Newsletter!</h4>
+			<h4 className={`${locale === 'en-US' && 'serif'}`}>{translate('subscribe-title')}</h4>
 			<form className='form-control'>
 				<div className='input'>
 					<input
 						type='email'
 						name='email'
 						id='email'
-						placeholder='Enter your email...'
+						placeholder={translate('email-placeholder')}
 						value={formik.values.email}
 						onChange={formik.handleChange}
+						style={{ textAlign: `${locale === 'en-US' ? 'start' : 'end'}` }}
 					/>
 					{formik.errors.email && <p className='error-msg'>{formik.errors.email}</p>}
 				</div>
@@ -54,9 +60,9 @@ function Newsletter() {
 					status={status}
 					disabled={formik.errors}
 					onClick={formik.handleSubmit}
-					successText='Subscribed'
+					successText='subscribed'
 				>
-					Subscribe
+					{translate('subscribe')}
 				</Button>
 			</form>
 		</Wrapper>
@@ -72,7 +78,6 @@ const Wrapper = styled.div`
 	width: 100%;
 
 	h4 {
-		font-family: var(--font-dm-serif);
 		padding: 0.5rem;
 	}
 
@@ -84,13 +89,16 @@ const Wrapper = styled.div`
 
 		.input {
 			position: relative;
+			width: 170px;
 			.error-msg {
+				width: 170px;
 				position: absolute;
-				top: 40px;
+				top: 45px;
 				color: #f86363;
 				font-size: 0.8rem;
 			}
 			input {
+				width: 170px;
 				border: none;
 				padding: 0.6rem;
 				font-family: inherit;

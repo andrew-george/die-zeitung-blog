@@ -1,0 +1,10 @@
+{
+	"header-title": "Hello, This is die Zeitung",
+	"header-text": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate nulla sint consequuntur ipsa nam animi deleniti sit obcaecati soluta. Molestiae eum aliquam commodi amet, totam laboriosam inventore esse pariatur ratione.",
+	"subscribe-title": "Subscribe to Newsletter!",
+	"email-placeholder": "Enter your email",
+	"subscribe": "Subscribe",
+	"subscribed": "Subscribed",
+	"invalid-email": "Invalid Email!",
+	"empty-email": "Please enter your email!"
+}

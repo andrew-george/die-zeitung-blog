@@ -1,4 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { useTranslation } from 'next-i18next'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from 'react-spinners/ClipLoader'
@@ -12,6 +13,7 @@ function AuthButtons() {
 	const theme = useSelector((store: RootState) => store.theme)
 	const dispatch = useDispatch()
 
+	const { t: translate } = useTranslation('nav')
 	const { user, isLoading } = useUser()
 
 	useEffect(() => {
@@ -40,13 +42,13 @@ function AuthButtons() {
 			{!!user == true ? (
 				<div className='auth'>
 					<Button className='logout-btn' type='button' theme={theme} style='none'>
-						<a href='/api/auth/logout'>Logout</a>
+						<a href='/api/auth/logout'>{translate('logout')}</a>
 					</Button>
 					<NavProfile />
 				</div>
 			) : (
 				<Button type='button' style='fill' theme={theme}>
-					<a href='/api/auth/login'>Login</a>
+					<a href='/api/auth/login'>{translate('login')}</a>
 				</Button>
 			)}
 		</AuthButtonsWrapper>

@@ -1,4 +1,5 @@
 import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { appWithTranslation } from 'next-i18next'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useState } from 'react'
@@ -9,7 +10,7 @@ import Layout from '../components/ui/Layout'
 import { store } from '../redux/store'
 import '../styles/globals.css'
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
 	const [queryClient] = useState(() => new QueryClient())
 
 	return (
@@ -30,3 +31,5 @@ export default function App({ Component, pageProps }: AppProps) {
 		</QueryClientProvider>
 	)
 }
+
+export default appWithTranslation(App)

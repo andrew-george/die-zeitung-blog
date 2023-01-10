@@ -1,15 +1,18 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { useTranslation } from 'next-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { RootState, toggleSideMenu, toggleTheme } from '../../redux/store'
 import Button from '../ui/Button'
 import AuthButtons from './AuthButtons'
+import LocaleSwitch from './LocaleSwitch'
 import MobileNavbar from './MobileNavbar'
 import NavMenu from './NavMenu'
 
 function MobileNavMenu() {
 	const theme = useSelector((store: RootState) => store.theme)
 
+	const { t: translate } = useTranslation('nav')
 	const { user, isLoading } = useUser()
 
 	const dispatch = useDispatch()
@@ -21,10 +24,11 @@ function MobileNavMenu() {
 			{!!user && (
 				<div className='auth'>
 					<Button className='logout-btn' type='button' theme={theme} style='none'>
-						<a href='/api/auth/logout'>Logout</a>
+						<a href='/api/auth/logout'>{translate('logout')}</a>
 					</Button>
 				</div>
 			)}
+			<LocaleSwitch />
 		</Wrapper>
 	)
 }
@@ -58,26 +62,25 @@ const Wrapper = styled.div`
 		}
 
 		.dropdown {
+			display: flex;
 			text-align: center;
 			padding: 0;
 			width: fit-content;
 			background-color: inherit;
 			border-radius: 5px;
 			position: absolute;
-			left: 150px;
+			left: 100px;
 			top: -2px;
 			transition: 0.1s ease all;
 
 			&.collapsed {
-				display: block;
-				transform: translateX(-200px);
+				transform: translateX(-200vw);
 			}
 
 			.dropdown-item {
-				padding: 5px 0;
+				margin: 0 10px;
 				font-size: 0.9rem;
 				font-weight: 600;
-				/* color: #000000; */
 			}
 		}
 	}

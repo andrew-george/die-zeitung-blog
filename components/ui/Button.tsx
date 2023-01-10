@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React from 'react'
 import { AiFillCheckCircle } from 'react-icons/ai'
 import { BiErrorCircle } from 'react-icons/bi'
@@ -16,19 +17,20 @@ function Button(props: {
 	className?: string
 	onClick?: () => void
 }) {
+	const { t: translate } = useTranslation('header')
 	//- conditional style returns
 	if (props.error) {
 		return (
 			<ErrorButton className={props?.className} type={props.type} disabled={props.disabled}>
 				<BiErrorCircle />
-				<span>Subscribe</span>
+				<span>{translate('subscribe')}</span>
 			</ErrorButton>
 		)
 	}
 	if (props.status === 'success') {
 		return (
 			<SuccessButton className={props?.className} type={props.type}>
-				<AiFillCheckCircle /> <span>{props.successText}</span>
+				<AiFillCheckCircle /> <span>{translate(props.successText)}</span>
 			</SuccessButton>
 		)
 	}
@@ -37,7 +39,6 @@ function Button(props: {
 		return (
 			<LoadingButton className={props?.className} type={props.type}>
 				<ClipLoader size={10} />
-				<span>Loading</span>
 			</LoadingButton>
 		)
 	}
@@ -80,6 +81,8 @@ const PlainButton = styled.button`
 	align-items: center;
 	border-radius: 5px;
 	margin-left: 0.5rem;
+	min-width: 60px;
+	min-height: 40px;
 	font-weight: 600;
 
 	span {

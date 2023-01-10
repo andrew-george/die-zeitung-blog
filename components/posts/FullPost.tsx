@@ -1,4 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -16,8 +17,9 @@ function FullPost(props: { post }) {
 		props.post
 
 	const { user } = useUser()
+	const { t: translate } = useTranslation('post')
 
-	const router = useRouter()
+	const { replace, locale } = useRouter()
 
 	const { mutate } = useMutation('delete-post', deletePost, {
 		onSuccess: () => {
@@ -25,7 +27,7 @@ function FullPost(props: { post }) {
 				toast: true,
 				heightAuto: true,
 				icon: 'success',
-				titleText: 'Post has been deleted!',
+				titleText: translate('post-deleted'),
 				showCancelButton: false,
 				showConfirmButton: false,
 				background: `${theme === 'light' ? '#fff' : '#111'}`,
@@ -33,34 +35,38 @@ function FullPost(props: { post }) {
 				position: 'center',
 				timer: 1000,
 			})
-			router.replace('/dashboard')
+			replace('/dashboard')
 		},
 	})
 
 	const theme = useSelector((store: RootState) => store.theme)
 
-	const formattedDate = new Date(year, month - 1).toLocaleDateString('en-US', {
+	const formattedDate = new Date(year, month).toLocaleDateString(locale, {
 		month: 'long',
 		year: 'numeric',
 	})
 
 	return (
 		<Wrapper>
-			<h1>{title}</h1>
+			<h1 className={`${locale === 'en-US' && 'serif'}`}>{title}</h1>
 			<div className='details'>
-				<div className='image'>
+				<div className='author-image'>
 					<Image src={authorImage} alt={author} width={100} height={100} />
 				</div>
 				<p>{author}</p>
-				<p className='date'>Posted on {formattedDate}</p>
-				<p className='reads'>{reads} reads</p>
+				<p className='date'>
+					{translate('posted-on')} {formattedDate}
+				</p>
+				<p className='reads'>
+					{reads.toLocaleString(locale)} {translate('reads')}
+				</p>
 			</div>
 			{userSub === user?.sub && (
 				<div className='btn-container'>
 					<Link href={`/edit-post/${props.post.id}`}>
 						<Button className='action-btn edit-btn' style='fill' theme={theme} type='button'>
 							<FaEdit />
-							Edit
+							{translate('edit')}
 						</Button>
 					</Link>
 					<Button
@@ -70,12 +76,13 @@ function FullPost(props: { post }) {
 						type='button'
 						onClick={() => {
 							Swal.fire({
-								title: 'Are you sure?',
-								text: "You won't be able to revert this!",
+								title: translate('modal-title'),
+								text: translate('modal-text'),
 								showCancelButton: true,
 								confirmButtonColor: '#d34d4d',
 								cancelButtonColor: '#b2b2b2',
-								confirmButtonText: 'Yes, delete it!',
+								confirmButtonText: translate('modal-confirm'),
+								cancelButtonText: translate('modal-cancel'),
 								color: `${theme === 'light' ? '#111' : '#fff'}`,
 								background: `${theme === 'light' ? '#fff' : '#111'}`,
 							}).then(result => {
@@ -86,13 +93,15 @@ function FullPost(props: { post }) {
 						}}
 					>
 						<FaTrash />
-						Delete
+						{translate('delete')}
 					</Button>
 				</div>
 			)}
-			<p className='text'>{intro}</p>
-			<Image src={image} alt='logo' width={700} height={500} />
-			<p className='text'>{content}</p>
+			<p className={`${locale === 'ar-EG' ? 'arabic-text' : 'text'}`}>{intro}</p>
+			<div className='topic-image'>
+				<Image src={image} alt='logo' width={700} height={500} />
+			</div>
+			<p className={`${locale === 'ar-EG' ? 'arabic-text' : 'text'}`}>{content}</p>
 		</Wrapper>
 	)
 }
@@ -107,7 +116,6 @@ const Wrapper = styled.div`
 	width: 80%;
 
 	h1 {
-		font-family: var(--font-dm-serif);
 		font-size: 2.4rem;
 		margin-bottom: 2rem;
 
@@ -124,7 +132,7 @@ const Wrapper = styled.div`
 		align-items: center;
 		margin-bottom: 2rem;
 
-		.image {
+		.author-image {
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -182,8 +190,15 @@ const Wrapper = styled.div`
 		}
 	}
 
-	img {
+	.topic-image {
+		max-width: 700px;
+		max-height: 500px;
 		margin: 3rem 0;
+	}
+
+	img {
+		border-radius: 5px;
+		object-fit: cover;
 
 		@media (max-width: 768px) {
 			width: 100%;
